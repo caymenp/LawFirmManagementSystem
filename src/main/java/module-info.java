@@ -4,5 +4,5 @@ module com.example.appointmentmanager {
 
 
     opens com.example.appointmentmanager to javafx.fxml;
-    exports com.example.appointmentmanager;
+    exports com.example.model;
 }
