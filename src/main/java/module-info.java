@@ -5,6 +5,6 @@ module com.example.appointmentmanager {
     requires java.sql;
 
 
-    opens com.example.appointmentmanager to javafx.fxml;
+    opens com.example.controller to javafx.fxml;
     exports com.example.model;
 }

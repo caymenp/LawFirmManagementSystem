@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Main Login Model.
+ */
 public class MainLogin extends Application {
     @Override
     public void start(Stage stage) throws IOException {

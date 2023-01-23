@@ -3,6 +3,9 @@ package com.example.helper;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * JDBC Helper Class.
+ */
 public abstract class JDBC {
 
     private static final String protocol = "jdbc";
