@@ -1,4 +1,4 @@
-package com.example.helper;
+package com.example.utilities;
 
 import com.example.controller.AppointmentsOverviewController;
 import javafx.event.ActionEvent;
