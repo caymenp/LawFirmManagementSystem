@@ -83,7 +83,7 @@
                      </font>
                   </Text>
                   <ComboBox fx:id="countryList" onAction="#countryList" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
-                  <ComboBox fx:id="stateList" disable="true" layoutX="297.0" layoutY="507.0" onAction="#stateList" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
+                  <ComboBox fx:id="stateList" disable="true" layoutX="297.0" layoutY="507.0" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" />
                </children>
             </GridPane>
             <Line endX="325.0" layoutX="275.0" layoutY="475.0" startX="-275.0" />

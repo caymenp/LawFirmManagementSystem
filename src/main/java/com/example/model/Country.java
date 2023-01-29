@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+/** Country Class used for getting country objects from the DB*/
 
 public class Country {
     private int countryID;

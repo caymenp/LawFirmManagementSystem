@@ -25,7 +25,6 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -428,7 +427,7 @@ public class AppointmentsOverviewController implements Initializable {
      * This method holds the data and table assignment for the appointment table. It takes a String param of viewType to
      * determine what "filter" to apply to the appointment observable list. To properly display the appointments, whichever
      * toggle button is clicked.
-     * @param viewType
+     * @param viewType as String, hard coded values to the toggle group
      */
     public void appointmentTableView(String viewType) {
         ObservableList<Appointment> appointmentsView = FXCollections.observableArrayList();
@@ -459,7 +458,13 @@ public class AppointmentsOverviewController implements Initializable {
         }
     }
 
-    public void aptCalFilter(ActionEvent actionEvent) throws SQLException {
+    /**Toggle Group Calendar Filter For Appointment Table.
+     * This method listens for action events ON the toggle group. When an action even is heard on the group, the method
+     * checks to see which target the action event was on and then calls the appointmentTableView method with the target
+     * hard coded keyword.
+     * @param actionEvent listens for click on the toggle group
+     */
+    public void aptCalFilter(ActionEvent actionEvent) {
 
         if (actionEvent.getTarget().equals(viewAllRadio)) {
             appointmentTableView("viewAll");
@@ -471,7 +476,14 @@ public class AppointmentsOverviewController implements Initializable {
 
     }
 
-    public void changeTableView(ActionEvent actionEvent) throws SQLException {
+    /**Action Event listener to change from Appointment Table to Customer Table.
+     * Listens for an action event on the @changeTableView button. The application is initialized with the appointments
+     * table showing. There is a button that says "View Customers", when this is clicked the table changes to the customer
+     * table by toggling the visibility of the two tables with an if statement. This also toggles the button text value
+     * between "View customers" and "View Appointments".
+     * @param actionEvent listens for action on @changeTableView button
+     */
+    public void changeTableView(ActionEvent actionEvent) {
         String changeView = changeTableView.getText();
 
         if (changeView.equals("View Customers")) {
@@ -493,7 +505,9 @@ public class AppointmentsOverviewController implements Initializable {
 
     }
 
-
+    /** Initializes Customer Table.
+     * Maps the column values of the customer table to the observable list recieved from the method call to Customer.getAllCustomers().
+     */
     public void customerTableView() {
 
         cxColID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
@@ -510,6 +524,14 @@ public class AppointmentsOverviewController implements Initializable {
         customerTable.setItems(Customer.getAllCustomers());
     }
 
+    /** Upcoming Appointment Alert (15 Minutes).
+     * This method is called from the mainLogin controller upon a successful login. This sets up a new alert, and gets
+     * a copy of the observable list from Appointment.getAllAppointments(). It then goes through each appointment and
+     * checks the start date to the user local date. If there is a match, it then checks to see if the start appointment
+     * is within 15 minutes of the users local time at login. If there is a matching appointment, the GUI pops an alert
+     * right before scenes are changed alerting the user of the Appointment ID and time. If not appointment matches, an
+     * alert is popped displaying "No appointments within 15 minutes".
+     */
     public void upcomingAppointmentAlert() {
         AlertMessages alertMessages = new AlertMessages();
         LocalDateTime currentUserTime = Timestamp.valueOf(LocalDateTime.now()).toLocalDateTime();
@@ -533,7 +555,11 @@ public class AppointmentsOverviewController implements Initializable {
                 "scheduled appointments within 15 minutes from " +DateTimeConversion.getUserDisplayTime(Timestamp.valueOf(currentUserTime)));
     }
 
-
+    /**JavaFX Initialize Appointment Overview Scene
+     * Sets the local time zone to the current users timezone. Calls the upcomingAppointmentAlert to ensure alerts are
+     * displayed upon successful login. Then calls both table views (customer, appointment) to ensure the data is retrieved
+     * and ready for display.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         localTimeZone.setText(userUtilities.getTimeZone());

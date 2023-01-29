@@ -8,9 +8,13 @@ import com.example.model.Division;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-
+/**Class for Country & Division Handling */
 public class CountryDivision {
-
+    /** Get Country Name.
+     * Takes a divisionID and returns the country name as a string
+     * @param dvID
+     * @return
+     */
     public static String getCountryName(int dvID) {
         Division passedDivision = Division.getDivision(String.valueOf(dvID));
         int countryID = passedDivision.getCountryID();
@@ -23,6 +27,11 @@ public class CountryDivision {
 
     }
 
+    /** Get Division name.
+     * Takes a divisionID, and returns the division name as a string.
+     * @param dvID
+     * @return
+     */
     public static String getDivisionName(int dvID) {
         Division passedDivision = Division.getDivision(String.valueOf(dvID));
 
@@ -33,8 +42,7 @@ public class CountryDivision {
     public static void addCustomer(Customer newCX) {
         Timestamp currentTimeStamp = Timestamp.valueOf(LocalDateTime.now());
 
-        CustomerDoeImpl.addCustomer(newCX);
-        System.out.println("Made it to the CountryDivision");
+        CustomerDoeImpl.addCustomer(newCX);;
     }
 
 }

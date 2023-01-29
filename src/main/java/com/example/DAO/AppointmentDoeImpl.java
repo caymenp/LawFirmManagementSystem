@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Month;
+/** Appointemnt DOE used for creation/updating/deleting Appointment objects from the DB*/
 
 public class AppointmentDoeImpl {
 

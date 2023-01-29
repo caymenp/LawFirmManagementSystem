@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+/** Customer Class used for creation/updating/deleting customer objects from the DB*/
+
 public class Customer {
 
     private int customerID;

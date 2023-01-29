@@ -30,7 +30,8 @@ public class CustomerFormController implements Initializable {
     public TextField customerStreetAddress;
     public TextField customerPostal;
     public TextField customerPhone;
-    public ComboBox<String> countryList;
+    @FXML
+    private ComboBox<String> countryList;
     public ComboBox<String> stateList;
     public Button cancelBTN;
     public Button saveNewCustomer;
@@ -39,6 +40,14 @@ public class CustomerFormController implements Initializable {
     String selectedCountry;
     int selectedCountryID;
 
+    /** Country List ComboBox Action.
+     * Listens for an action event on the combobox, and when clicked this method retrieves the value of the selected country,
+     * it assigns the selected country string to a local variable for other methods to use. It then takes that string value
+     * of the country name, and calls the getter on Country.getCountryID to get the Country object's ID. Upon the selection
+     * of a country, this method initializes the Division list to ensure proper filtering of the divisions based on the
+     * value of the selected country.
+     * @param actionEvent
+     */
     public void countryList(ActionEvent actionEvent) {
         selectedCountry = countryList.getValue();
         selectedCountryID = Country.getCountryID(selectedCountry);
@@ -46,10 +55,11 @@ public class CustomerFormController implements Initializable {
 
     }
 
-    public void stateList(ActionEvent actionEvent) {
-        System.out.println(stateList.getValue());
-    }
-
+    /** Action Event Listener on the Cancel Button of the Customer Form.
+     * Listens for click on the close button, and when the action is triggered, closes the current stage, and reassigns the
+     * main stage to the source of the original action event that displayed the customer form.
+     * @param actionEvent click event on the close button
+     */
     public void cancelBTN(ActionEvent actionEvent) {
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
@@ -58,6 +68,14 @@ public class CustomerFormController implements Initializable {
 
     Customer passedCustomer;
     User passedUser;
+
+    /** Getting Data From AppointmentOverView Controller Upon Stage creation and scene change.
+     * This method is called from the AppointmentOverview controller when "modify customer" button is pressed. Takes two
+     * parameters to get the data from the selected customer on the table and the current logged-in user for update logging.
+     * Sets the customerForm fields to pre-populate the passed customer object's data.
+     * @param customer Customer object selected on the customer table when the modify customer button is clicked
+     * @param user Current logged-in user passed from the AppointmentOverview Controller for update logging.
+     */
     public void getData(Customer customer, User user) {
         passedCustomer = customer;
         passedUser = user;
@@ -75,10 +93,24 @@ public class CustomerFormController implements Initializable {
         stateList.getSelectionModel().select(CountryDivision.getDivisionName(customer.getDivisionID()));
     }
 
+    /**Gets User Object from AppointmentOverview Controller upon "AddCustomer" being clicked.
+     * When there is no customer selected on the customer table and the add new customer button is clicked, the
+     * AppointmentOverview Controller sends the current logged-in user to ensure logging of updates.
+     * @param user current logged-in user.
+     */
     public void getUser(User user) {
         passedUser = user;
     }
 
+    /** Save/Modify Customer Form Submission Method.
+     * Listens for an action event on the "save" button of the customerForm. When the action is heard, this method performs
+     * basic validation on the form fields to ensure no empty fields or empty comboBox values. If validation passes,
+     * it assigns all customer fields to the form field values and creates a new customer object using the Customer
+     * constructor. If then checks to see if this form is for modifying an existing customer of for adding a new customer
+     * based on the form label text value. It then calls the appropriate method to pass the newly created customer to the
+     * appropriate method for processing with the DB.
+     * @param actionEvent
+     */
     public void saveNewCustomer(ActionEvent actionEvent) {
         AlertMessages alertMessages = new AlertMessages();
         if (customerName.getText().isEmpty()) {
@@ -140,19 +172,16 @@ public class CustomerFormController implements Initializable {
             Customer newCustomer = new Customer(custID, name, address, zipcode, phone, createdDate, createdBy, lastUpdate, updatedBy, divisionID);
 
             Customer.updateCX(newCustomer);
-            System.out.println("Sending to Customer Class");
 
         }
 
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
 
-
     }
     @FXML
     private void initilizeCountry() {
         countryList.setItems(Country.getAllCountries());
-
     }
 
     private void initilizeDivisons() {
@@ -160,12 +189,12 @@ public class CustomerFormController implements Initializable {
         stateList.setDisable(false);
     }
 
+    /** Initializes the JavaFX CustomerForm Controller
+     * Calls the initializeCountry() method to ensure the country combobox is populated upon loading.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-
             initilizeCountry();
-
     }
 
 }

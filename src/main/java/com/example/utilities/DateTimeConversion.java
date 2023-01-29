@@ -7,8 +7,7 @@ import javafx.util.Pair;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-
+/**DateTimeConversion Class - Used to facilitate the time conversions throughout the Application */
 public class DateTimeConversion {
 
     //UTC ZONE ID
@@ -18,55 +17,12 @@ public class DateTimeConversion {
     // USERS SYSTEM DEFAULT ZONE IF
     private static ZoneId currentZoneID = ZoneId.systemDefault();
 
-    public static LocalDate getCurrentLocalDate() {
-        return LocalDate.now();
-    }
-
-    public static LocalTime getCurrentLocalTime() {
-        return LocalTime.now();
-    }
-
-    public static LocalDateTime getLocalDateTime() {
-        return LocalDateTime.of(getCurrentLocalDate(), getCurrentLocalTime());
-    }
-
-    public static ZonedDateTime getLocalZonedDateTime() {
-        return ZonedDateTime.of(getLocalDateTime(), currentZoneID);
-    }
-
-    //-------------------Conversion Methods--------------------
-
-    // User Time -> UTC
-    public static ZonedDateTime localToUTC() {
-        return ZonedDateTime.ofInstant(getLocalZonedDateTime().toInstant(), utcZoneID).truncatedTo(ChronoUnit.SECONDS);
-    }
-
-    //UTC -> User Time
-    public static ZonedDateTime utcToLocal() {
-        return ZonedDateTime.ofInstant(localToUTC().toInstant(), currentZoneID).truncatedTo(ChronoUnit.SECONDS);
-    }
-
-
-    // Convert To Local Time FROM SQL to display
-//    public static LocalDateTime getLocalDisplayString(Timestamp sqlDateTime) {
-//        LocalDateTime utcLocalDate = sqlDateTime.toLocalDateTime();
-//        ZonedDateTime zdt = utcLocalDate.atZone(utcZoneID);
-//        ZonedDateTime newZDT = zdt.withZoneSameInstant(currentZoneID);
-//        LocalDateTime localDateTimeString = newZDT.toLocalDateTime();
-//        return Timestamp.valueOf(localDateTimeString);
-//
-//    }
-
-    public static String getUTCdateTime(String localString) {
-        Timestamp convStr = Timestamp.valueOf(localString);
-        LocalDateTime ldt = convStr.toLocalDateTime();
-        ZonedDateTime zdt = ldt.atZone(currentZoneID);
-        ZonedDateTime newZDT = zdt.withZoneSameInstant(utcZoneID);
-        LocalDateTime utcDateTimeString = newZDT.toLocalDateTime();
-        return Timestamp.valueOf(utcDateTimeString).toString();
-
-    }
-
+    /**Available Appointment Times.
+     * This method creates a list of available appointment times to be displayed for user selection based on the available
+     * business hours in EST converted to local time. The times are added to a list for easier user selection, and to ensure
+     * the validation of appointments ONLY during business hours in EST.
+     * @return observableList of appointment times determined from EST time to local user time.
+     */
     public static ObservableList<LocalTime> availableAppointmentTimes() {
         ObservableList<String> estTimes = FXCollections.observableArrayList();
 
@@ -101,6 +57,13 @@ public class DateTimeConversion {
 
     }
 
+    /**Get Local User Time.
+     * Takes a timestamp as a parm, then creates a datetime format for proper display to the application users. It determines
+     * the user zoneID and converts the UTC timestamp from the DB to EST time, and then converts that EST time to the
+     * user local time zone for display.
+     * @param sqlTime timestamp passed in to be converted to user local time
+     * @return a timestamp formatted and converted to user local time.
+     */
     public static Timestamp getUserDisplayTime(Timestamp sqlTime) {
 
         LocalDateTime sqlToJava = sqlTime.toLocalDateTime();
@@ -119,6 +82,12 @@ public class DateTimeConversion {
 
     }
 
+    /** Converts time from user local time to be saved in the DB.
+     * Takes a timestamp from the user local time, and formats it into a DateTime. It then takes the timestamp and
+     * gets the ETC time conversion. With the ETC time, it then converts that into UTC time to be saved in the DB.
+     * @param localtime current user local timestamp
+     * @return timestamp converted to EST and then to UTC to be saved in the DB.
+     */
     public static Timestamp saveToDB(Timestamp localtime) {
         LocalDateTime currentUser = localtime.toLocalDateTime();
 
@@ -134,6 +103,12 @@ public class DateTimeConversion {
                 return dbConv;
     }
 
+    /** Determines the week of the current day
+     * This method gets the full week values of the current user date. It determines how far the current day is from
+     * Sunday (Start of the week) and Saturday (end of week) and gets those dates of the sunday and saturday of the current
+     * week. It then returns a pair with these two values to be used to calendar/table filtering.
+     * @return a pair containing the date of the start of the week and end of week for filtering calendar.
+     */
     public static Pair<LocalDate, LocalDate> getWeek() {
 
         LocalDate currentUser = LocalDate.now();
@@ -160,9 +135,6 @@ public class DateTimeConversion {
 
     }
 
-
-    //toInstant() -> UTC
-    // ofInstant() -> Local (pass in a Zone ID as 2nd Argument)
 
 }
 

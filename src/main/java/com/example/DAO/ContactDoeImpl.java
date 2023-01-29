@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+/** Contact DOE used for creation/updating/deleting Contact objects from the DB*/
 
 public class ContactDoeImpl {
 

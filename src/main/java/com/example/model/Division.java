@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+/** Division Class used for creation/updating/deleting Division objects from the DB*/
 
 public class Division{
 

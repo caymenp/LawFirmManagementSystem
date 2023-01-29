@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -22,6 +21,11 @@ public class MainLogin extends Application {
 
     public static String mainLabel;
 
+    /** Start Method
+     * Gets the resource bundle to apply to the program at laod.
+     * @param stage
+     * @throws IOException
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -34,13 +38,15 @@ public class MainLogin extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) throws SQLException {
+    /** Start Main Method
+     * Determines the resource bundle to be used by the Start method above. Then, launches the JBDC controller and then the
+     * application program.
+     * @param args
+     */
+    public static void main(String[] args) {
         try {
             ResourceBundle rb = ResourceBundle.getBundle("com.example.appointmentmanager.localization.mainLoginUI", Locale.getDefault());
 
-            if (Locale.getDefault().getLanguage().equals("fr")) {
-
-            }
         } catch (MissingResourceException e) {
 
         }

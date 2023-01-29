@@ -20,7 +20,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -41,24 +40,28 @@ public class MainLoginController implements Initializable {
     User activeUser;
     ResourceBundle rb;
 
+    /** Initialize Main Login Method
+     * This method is called when the MainLogin page is initialized from JavaFX. Upon load, this method gets the current
+     * user locale to determine the appropriate resource bundle to apply to the page. It then uses this resource bundle to
+     * call the applyLanguage method to ensure text is translated to users Locale. It also determines the current users
+     * timeZone and loads it on to the login screen in text display.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         rb = ResourceBundle.getBundle("com.example.appointmentmanager.localization.mainLoginUI", Locale.getDefault());
         applyLanguage(rb);
-        /**
-         * TimeZone Dynamic Text-UserUtilities
-         */
         timeZone.setText(userInfo.getTimeZone());
-
-
-
     }
 
-    /**
-     * UserUtilities Dynamic Text
+    /** Main Login Method for Form Validation and Login Verification.
+     * This method listens for the action event on the login button of the form. It performs basic form validation to ensure
+     * no fields are empty. It then calls the verifyUser method from the User class to ensure that the username and password
+     * entered match what is saved in the DB. If the login is successful, the user is logged in and the activity is recorded.
+     * If the login is not successful, the user is notified of their login error and the attempt is logged.
+     * @param actionEvent login button on the login form.
+     * @throws IOException
      */
-
-    public void loginBTN(ActionEvent actionEvent) throws IOException, SQLException {
+    public void loginBTN(ActionEvent actionEvent) throws IOException {
         //Checks If UserName field is empty
         if (loginUsername.getText().isEmpty()) {
             AlertMessages alertMessages = new AlertMessages();
@@ -96,6 +99,12 @@ public class MainLoginController implements Initializable {
         loginActivity(false);
     }
 
+    /** Passes Verified Logged-In User to the AppointmentOverview
+     * This method is called upon the successful login of a user, and sets the new stage and scene for the Appointment
+     * Overview GUI.
+     * @param actionEvent on the login button, based on successful login
+     * @throws IOException
+     */
     public void passActiveUser(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/com/example/appointmentmanager/AppointmentsOverview-view.fxml"));
@@ -109,6 +118,10 @@ public class MainLoginController implements Initializable {
         stage.show();
     }
 
+    /** Apply Current User Locale Language.
+     * Takes the resource bundle from the initialize method and sets the forms fields to the correct language.
+     * @param rb resourceBundle from the Initializer based on current user locale.
+     */
     public void applyLanguage(ResourceBundle rb) {
         mainLabel.setText(rb.getString("mainLabel"));
         subLabel.setText(rb.getString("subLabel"));
@@ -118,6 +131,14 @@ public class MainLoginController implements Initializable {
         timeZoneLabel.setText(rb.getString("timeZoneLabel"));
     }
 
+    /**Activity Logging To File.
+     * Sets up a new filewriter to write activity logs of user login attempts. This method accepts one param of boolean
+     * type. This param is what determines which method is printed. "Successful" or "Invalid Login". It determines the
+     * passed boolean value and gets the username used at login to form the log string with the timestamp of the activity
+     * in UTC.
+     * @param status boolean passed to determine which string is printed, based on login status.
+     * @throws IOException for the fileWriter
+     */
     public void loginActivity(boolean status) throws IOException {
 
         FileWriter fwVariable = new FileWriter("login_activity", true);

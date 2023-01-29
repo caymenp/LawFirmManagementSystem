@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+/** User DOE used for creation/updating/deleting user objects from the DB*/
 
 public class UserDoaImpl {
     public int currentUserID;

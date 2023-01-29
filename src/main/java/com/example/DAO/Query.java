@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static com.example.DAO.JDBC.connection;
+/** Query DOE used for creation/updating/deleting objects by creating a template for Queries to the DB.*/
 
 public class Query {
     private static String query;

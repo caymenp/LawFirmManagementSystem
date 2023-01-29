@@ -1,0 +1,5 @@
+module:com.example.appointmentmanager
+com.example.controller
+com.example.DAO
+com.example.model
+com.example.utilities

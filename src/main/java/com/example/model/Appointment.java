@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Month;
 
+/** Appointemnt Class used for creation/updating/deleting Appointment objects from the DB*/
 public class Appointment {
 
     private int appointmentID;
@@ -27,7 +28,23 @@ public class Appointment {
     private int userID;
     private int contactID;
 
-    //New Appointment Constructor
+    /** New Appointment Contructor.
+     * Takes all the params from the DB values, to create appointment objects from the DB.
+     * @param appointmentID
+     * @param title
+     * @param description
+     * @param location
+     * @param type
+     * @param startDateTime
+     * @param endDateTime
+     * @param createDateTime
+     * @param createdBy
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     * @param customerID
+     * @param userID
+     * @param contactID
+     */
     public Appointment(int appointmentID, String title, String description,
                        String location, String type, Timestamp startDateTime,
                        Timestamp endDateTime, Timestamp createDateTime, String createdBy,
@@ -49,7 +66,21 @@ public class Appointment {
         this.contactID = contactID;
     }
 
-    //Update Appointment Constructor
+    /** Update Appointment Constructor.
+     * Used when an existing appointment is being updated and not all DB values need to be updated.
+     * @param appointmentID
+     * @param title
+     * @param description
+     * @param location
+     * @param type
+     * @param startDateTime
+     * @param endDateTime
+     * @param lastUpdate
+     * @param lastUpdatedBy
+     * @param customerID
+     * @param userID
+     * @param contactID
+     */
     public Appointment(int appointmentID, String title, String description, String location,
                        String type, Timestamp startDateTime, Timestamp endDateTime, Timestamp lastUpdate,
                        String lastUpdatedBy, int customerID, int userID, int contactID) {
@@ -86,120 +117,6 @@ public class Appointment {
         this.userID = userID;
         this.contactID = contactID;
     }
-
-
-    // Get All Appointments Local Time
-    public static ObservableList<Appointment> getAllAppointments() {
-        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-
-
-        try{
-            allAppointments.addAll(AppointmentDoeImpl.getAllAppointments());
-            return allAppointments;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public static ObservableList<Appointment> customerAppointments(int cxID) {
-        ObservableList<Appointment> cxAppointments = FXCollections.observableArrayList();
-
-        try {
-            cxAppointments.addAll(AppointmentDoeImpl.getCxAppointments(cxID));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        return cxAppointments;
-    }
-
-    public static void addNewAppointment(Appointment app) {
-        try {
-            AppointmentDoeImpl.addAppointment(app);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void updateAppointment(Appointment appointment) {
-        try{
-            AppointmentDoeImpl.updateAppointment(appointment);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public static Appointment getAppointment(String AppointmentID) {
-        try {
-            Appointment gotAppointment = AppointmentDoeImpl.getAppointment(AppointmentID);
-            return gotAppointment;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static ObservableList<Appointment> getFilteredAppointments(LocalDate startDate, LocalDate endDate) {
-
-        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
-
-        String startDateString = startDate.toString();
-        String endDateString = endDate.toString();
-
-        try {
-            filteredAppointments.addAll(AppointmentDoeImpl.getFilteredAppointments(startDateString, endDateString));
-            return filteredAppointments;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public static ObservableList<Appointment> getAppointmentsByContact(int contactId) {
-        try {
-            return AppointmentDoeImpl.getAppointmentByContact(contactId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static String getWinningCustomer(Month month) {
-        try{
-           return AppointmentDoeImpl.getCustomerWithMostAppointments(month);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Returns an Observable List of Appointment Types - LAMBDA
-     * @return
-     */
-
-    public static ObservableList<String> allTypes() {
-        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
-        allAppointments.addAll(getAllAppointments());
-
-        ObservableList<String> allTypes = FXCollections.observableArrayList();
-
-        /**
-         * LAMBDA - Takes Appointment from list, gets the appointment Type, and adds it to a separate list.
-         * This new list it added the type to @allTypes, will be used to populate the "types" comboBox on the reports page.
-         */
-        allAppointments.forEach((a) -> {allTypes.add(a.getType());});
-
-        return allTypes;
-    }
-
-    public static void deleteAppointment(int appointmentid) {
-        try {
-            AppointmentDoeImpl.deleteAppointment(appointmentid);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     //Getters
 
@@ -315,6 +232,139 @@ public class Appointment {
 
     public void setContactID(int contactID) {
         this.contactID = contactID;
+    }
+
+
+    /** Get All Appointments (In User Local Time).
+     * Used to query the DB for ALL appointments and are stored in an Observable list.
+     * @return list of appointments
+     */
+    public static ObservableList<Appointment> getAllAppointments() {
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+        try{
+            allAppointments.addAll(AppointmentDoeImpl.getAllAppointments());
+            return allAppointments;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /** Appointments for Specific Customers.
+     * Gets a list of appointments based on a passed param of customer id.
+     * @param cxID customerID passed to query the DB for any appointments scheduled for this customerID
+     * @return list of appointments if any match the customerID.
+     */
+    public static ObservableList<Appointment> customerAppointments(int cxID) {
+        ObservableList<Appointment> cxAppointments = FXCollections.observableArrayList();
+
+        try {
+            cxAppointments.addAll(AppointmentDoeImpl.getCxAppointments(cxID));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return cxAppointments;
+    }
+
+    /** Add New Appointment.
+     * Takes an Appointment object to send to the DB to be added to the appointment table.
+     * @param app new appointment object to be added
+     */
+    public static void addNewAppointment(Appointment app) {
+        try {
+            AppointmentDoeImpl.addAppointment(app);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    /** Modify Appointment.
+     * Takes an Appointment object to send to the DB to be updated in the appointment table.
+     * @param appointment existing appointment object to be updated
+     */
+    public static void updateAppointment(Appointment appointment) {
+        try{
+            AppointmentDoeImpl.updateAppointment(appointment);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /** Get Filtered Appointments.
+     * Takes a startDate and endDate to be applied to a select statement in the DB query to select appointments that are
+     * between these two times.
+     * @param startDate - start of filter
+     * @param endDate - end of filter
+     * @return - List of appointments between these two dates.
+     */
+    public static ObservableList<Appointment> getFilteredAppointments(LocalDate startDate, LocalDate endDate) {
+
+        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+
+        String startDateString = startDate.toString();
+        String endDateString = endDate.toString();
+
+        try {
+            filteredAppointments.addAll(AppointmentDoeImpl.getFilteredAppointments(startDateString, endDateString));
+            return filteredAppointments;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /** Get Appointment by contact.
+     * Takes a contactID to query the DB to select appointments assigned with this contactID
+     * @param contactId - contactID to be queried
+     * @return - list of matching appointments that are assigned this contactID.
+     */
+    public static ObservableList<Appointment> getAppointmentsByContact(int contactId) {
+        try {
+            return AppointmentDoeImpl.getAppointmentByContact(contactId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**Get Winning Customer (Customer with most appointments in a passed Month).
+     * Takes a Month as a param and queries this against a select statement that groups the results by month and customerID
+     * @param month - month to group sqlStmt by
+     * @return - String of matching customer name
+     */
+    public static String getWinningCustomer(Month month) {
+        try{
+           return AppointmentDoeImpl.getCustomerWithMostAppointments(month);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /** LAMBDA - Get All Appointment Types.
+     * Returns an Observable List of Appointment Types from the db. The lambda expression is completed within the forEach
+     * loop of the allAppointments list and takes each appointment and gets the type and adds it to the allTypes list.
+     * @return list of appointment types as Strings.
+     */
+    public static ObservableList<String> allTypes() {
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+        allAppointments.addAll(getAllAppointments());
+
+        ObservableList<String> allTypes = FXCollections.observableArrayList();
+
+        /**
+         * LAMBDA - Takes Appointment from list, gets the appointment Type, and adds it to a separate list.
+         * This new list it added the type to @allTypes, will be used to populate the "types" comboBox on the reports page.
+         */
+        allAppointments.forEach((a) -> {allTypes.add(a.getType());});
+
+        return allTypes;
+    }
+
+    public static void deleteAppointment(int appointmentid) {
+        try {
+            AppointmentDoeImpl.deleteAppointment(appointmentid);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

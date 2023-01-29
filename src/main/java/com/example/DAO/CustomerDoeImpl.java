@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+/** Customer DOE used for creation/updating/deleting customer objects from the DB*/
 
 public class CustomerDoeImpl {
 

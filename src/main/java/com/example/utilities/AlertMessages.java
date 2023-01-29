@@ -5,6 +5,10 @@ import javafx.scene.control.ButtonType;
 
 import java.util.ResourceBundle;
 
+/**Class used to generate Alert Messages.
+ * This Class is used to generate alert messages from the application by calling the requested alert type with the message
+ * title and description.
+ */
 public class AlertMessages {
 
     public ButtonType errorMessageUsername(ResourceBundle rb) {

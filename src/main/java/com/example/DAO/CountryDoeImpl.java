@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+/** Country DOE used for creation/updating/deleting country objects from the DB*/
 
 public class CountryDoeImpl {
 

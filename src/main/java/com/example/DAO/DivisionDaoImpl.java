@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+/** Division DOE used for creation/updating/deleting division objects from the DB*/
 
 public class DivisionDaoImpl {
 

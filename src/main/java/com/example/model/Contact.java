@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
+/** Contact Class used for creation/updating/deleting contact objects from the DB*/
 
 public class Contact {
     private int contactID;
