@@ -1,7 +1,7 @@
 package com.example.utilities;
 
+import java.time.ZoneId;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Get Current Users UserUtilities (TimeZone, language, etc.).
@@ -9,8 +9,7 @@ import java.util.TimeZone;
 public class UserUtilities {
 
     public String getTimeZone() {
-        TimeZone timeZone = TimeZone.getDefault();
-        return timeZone.getID();
+        return String.valueOf(ZoneId.systemDefault());
     }
 
     public String getLanguage() {

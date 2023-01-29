@@ -1,22 +1,25 @@
 package com.example.model;
 
+import com.example.DAO.AppointmentDoeImpl;
+import com.example.utilities.DateTimeConversion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.Month;
 
 public class Appointment {
-
-    ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
     private int appointmentID;
     private String title;
     private String description;
     private String location;
     private String type;
-    private String startDateTime;
-    private String endDateTime;
-    private String createDateTime;
+    private Timestamp startDateTime;
+    private Timestamp endDateTime;
+    private Timestamp createDateTime;
     private String createdBy;
     private Timestamp lastUpdate;
     private String lastUpdatedBy;
@@ -26,8 +29,8 @@ public class Appointment {
 
     //New Appointment Constructor
     public Appointment(int appointmentID, String title, String description,
-                       String location, String type, String startDateTime,
-                       String endDateTime, String createDateTime, String createdBy,
+                       String location, String type, Timestamp startDateTime,
+                       Timestamp endDateTime, Timestamp createDateTime, String createdBy,
                        Timestamp lastUpdate, String lastUpdatedBy, int customerID,
                        int userID, int contactID) {
         this.appointmentID = appointmentID;
@@ -35,11 +38,11 @@ public class Appointment {
         this.description = description;
         this.location = location;
         this.type = type;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.createDateTime = createDateTime;
+        this.startDateTime = DateTimeConversion.getUserDisplayTime(startDateTime);
+        this.endDateTime = DateTimeConversion.getUserDisplayTime(endDateTime);
+        this.createDateTime = DateTimeConversion.getUserDisplayTime(createDateTime);
         this.createdBy = createdBy;
-        this.lastUpdate = lastUpdate;
+        this.lastUpdate = DateTimeConversion.getUserDisplayTime(lastUpdate);
         this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
@@ -48,22 +51,154 @@ public class Appointment {
 
     //Update Appointment Constructor
     public Appointment(int appointmentID, String title, String description, String location,
-                       String type, String startDateTime, String endDateTime, Timestamp lastUpdate,
+                       String type, Timestamp startDateTime, Timestamp endDateTime, Timestamp lastUpdate,
                        String lastUpdatedBy, int customerID, int userID, int contactID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.lastUpdate = lastUpdate;
+        this.startDateTime = DateTimeConversion.getUserDisplayTime(startDateTime);
+        this.endDateTime = DateTimeConversion.getUserDisplayTime(endDateTime);
+        this.lastUpdate = DateTimeConversion.getUserDisplayTime(lastUpdate);
         this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
     }
 
+    public Appointment(String title, String description,
+                       String location, String type, Timestamp startDateTime,
+                       Timestamp endDateTime, Timestamp createDateTime, String createdBy,
+                       Timestamp lastUpdate, String lastUpdatedBy, int customerID,
+                       int userID, int contactID) {
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.startDateTime = DateTimeConversion.getUserDisplayTime(startDateTime);
+        this.endDateTime = DateTimeConversion.getUserDisplayTime(endDateTime);
+        this.createDateTime = DateTimeConversion.getUserDisplayTime(createDateTime);
+        this.createdBy = createdBy;
+        this.lastUpdate = DateTimeConversion.getUserDisplayTime(lastUpdate);
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.customerID = customerID;
+        this.userID = userID;
+        this.contactID = contactID;
+    }
+
+
+    // Get All Appointments Local Time
+    public static ObservableList<Appointment> getAllAppointments() {
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+
+
+        try{
+            allAppointments.addAll(AppointmentDoeImpl.getAllAppointments());
+            return allAppointments;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static ObservableList<Appointment> customerAppointments(int cxID) {
+        ObservableList<Appointment> cxAppointments = FXCollections.observableArrayList();
+
+        try {
+            cxAppointments.addAll(AppointmentDoeImpl.getCxAppointments(cxID));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return cxAppointments;
+    }
+
+    public static void addNewAppointment(Appointment app) {
+        try {
+            AppointmentDoeImpl.addAppointment(app);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateAppointment(Appointment appointment) {
+        try{
+            AppointmentDoeImpl.updateAppointment(appointment);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static Appointment getAppointment(String AppointmentID) {
+        try {
+            Appointment gotAppointment = AppointmentDoeImpl.getAppointment(AppointmentID);
+            return gotAppointment;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static ObservableList<Appointment> getFilteredAppointments(LocalDate startDate, LocalDate endDate) {
+
+        ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
+
+        String startDateString = startDate.toString();
+        String endDateString = endDate.toString();
+
+        try {
+            filteredAppointments.addAll(AppointmentDoeImpl.getFilteredAppointments(startDateString, endDateString));
+            return filteredAppointments;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public static ObservableList<Appointment> getAppointmentsByContact(int contactId) {
+        try {
+            return AppointmentDoeImpl.getAppointmentByContact(contactId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getWinningCustomer(Month month) {
+        try{
+           return AppointmentDoeImpl.getCustomerWithMostAppointments(month);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Returns an Observable List of Appointment Types - LAMBDA
+     * @return
+     */
+
+    public static ObservableList<String> allTypes() {
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+        allAppointments.addAll(getAllAppointments());
+
+        ObservableList<String> allTypes = FXCollections.observableArrayList();
+
+        /**
+         * LAMBDA - Takes Appointment from list, gets the appointment Type, and adds it to a separate list.
+         * This new list it added the type to @allTypes, will be used to populate the "types" comboBox on the reports page.
+         */
+        allAppointments.forEach((a) -> {allTypes.add(a.getType());});
+
+        return allTypes;
+    }
+
+    public static void deleteAppointment(int appointmentid) {
+        try {
+            AppointmentDoeImpl.deleteAppointment(appointmentid);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     //Getters
@@ -88,15 +223,15 @@ public class Appointment {
         return type;
     }
 
-    public String getStartDateTime() {
+    public Timestamp getStartDateTime() {
         return startDateTime;
     }
 
-    public String getEndDateTime() {
+    public Timestamp getEndDateTime() {
         return endDateTime;
     }
 
-    public String getCreateDateTime() {
+    public Timestamp getCreateDateTime() {
         return createDateTime;
     }
 
@@ -146,15 +281,15 @@ public class Appointment {
         this.type = type;
     }
 
-    public void setStartDateTime(String startDateTime) {
+    public void setStartDateTime(Timestamp startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public void setEndDateTime(String endDateTime) {
+    public void setEndDateTime(Timestamp endDateTime) {
         this.endDateTime = endDateTime;
     }
 
-    public void setCreateDateTime(String createDateTime) {
+    public void setCreateDateTime(Timestamp createDateTime) {
         this.createDateTime = createDateTime;
     }
 
@@ -181,4 +316,6 @@ public class Appointment {
     public void setContactID(int contactID) {
         this.contactID = contactID;
     }
+
+
 }

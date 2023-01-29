@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.model.User;
 import com.example.utilities.AlertMessages;
+import com.example.utilities.DateTimeConversion;
 import com.example.utilities.UserUtilities;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,15 +16,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**
- * Main Login Controller.
- */
+/** Controller for Main Login - Handles all login details/validation/verification */
 public class MainLoginController implements Initializable {
     public TextField loginUsername;
     public PasswordField loginPassword;
@@ -81,6 +84,7 @@ public class MainLoginController implements Initializable {
                 alertMessages.informationMessageLang(rb);
 
                 passActiveUser(actionEvent);
+                loginActivity(true);
                 return;
             }
         } catch (NullPointerException e) {
@@ -89,7 +93,7 @@ public class MainLoginController implements Initializable {
         // If login credentials are invalid. Sign in refused, error alert window.
         AlertMessages alertMessages = new AlertMessages();
         alertMessages.errorMessageVerify(rb);
-
+        loginActivity(false);
     }
 
     public void passActiveUser(ActionEvent actionEvent) throws IOException {
@@ -112,6 +116,24 @@ public class MainLoginController implements Initializable {
         loginPassword.setPromptText(rb.getString("loginPassword"));
         loginBTN.setText(rb.getString("loginBTN"));
         timeZoneLabel.setText(rb.getString("timeZoneLabel"));
+    }
+
+    public void loginActivity(boolean status) throws IOException {
+
+        FileWriter fwVariable = new FileWriter("login_activity", true);
+        PrintWriter pwVariable = new PrintWriter(fwVariable);
+
+        if (status) {
+            pwVariable.println("User " + activeUser.getUserName() + " successfully logged in at " + DateTimeConversion.saveToDB(Timestamp.valueOf(LocalDateTime.now())) + " UTC");
+            pwVariable.close();
+            fwVariable.close();
+            return;
+        }
+
+        pwVariable.println("User " + loginUsername.getText() + " gave invalid login at " + DateTimeConversion.saveToDB(Timestamp.valueOf(LocalDateTime.now())) + " UTC");
+        pwVariable.close();
+        fwVariable.close();
+
     }
 
 }

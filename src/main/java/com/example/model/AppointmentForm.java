@@ -3,6 +3,6 @@ package com.example.model;
 /**
  * Appointment Overview Model.
  */
-public class AppointmentsOverview {
+public class AppointmentForm {
 
 }

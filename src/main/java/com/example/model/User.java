@@ -1,6 +1,8 @@
 package com.example.model;
 
 import com.example.DAO.UserDoaImpl;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -94,5 +96,42 @@ public class User {
 
         }
         return null;
+    }
+
+    /**
+     * LAMBDA - List of String Customer Names
+     * @return returns ObservableList of Strings to display customer names.
+     */
+
+    public static ObservableList<String> getAllUserStrings() {
+        ObservableList<User> allUsers = FXCollections.observableArrayList();
+        ObservableList<String> allUserStrings = FXCollections.observableArrayList();
+
+        try {
+            allUsers.addAll(UserDoaImpl.getAllUsers());
+            /**
+             * LAMBDA - Adds Usernames to list in String form to display on the GUI.
+             */
+            allUsers.forEach((u) -> {allUserStrings.add(u.getUserName());});
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return allUserStrings;
+    }
+
+    public static User getUser(String username) {
+        try {
+            return UserDoaImpl.getUser(username);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static User getUser(int userID) {
+        try {
+            return UserDoaImpl.getUser(userID);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
