@@ -10,7 +10,12 @@ import java.sql.Timestamp;
 /** Division DOE used for creation/updating/deleting division objects from the DB*/
 
 public class DivisionDaoImpl {
-
+    /**
+     * Returns division record from DB that matches the passed id.
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public static Division getDivision(String id) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.first_level_divisions WHERE division_id = '"+id+"'";
         Query.makeQuery(sqlStatement);
@@ -32,6 +37,11 @@ public class DivisionDaoImpl {
         return null;
     }
 
+    /**
+     * Gets all division record from DB.
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Division> getAllDivisions() throws SQLException {
         ObservableList<Division> allDivisions= FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.first_level_divisions";

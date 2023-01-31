@@ -12,7 +12,12 @@ import java.sql.Timestamp;
 /** Customer DOE used for creation/updating/deleting customer objects from the DB*/
 
 public class CustomerDoeImpl {
-
+    /**
+     * Gets customer from DB that matches the passed customerID
+     * @param customerId
+     * @return
+     * @throws SQLException
+     */
     public static Customer getCustomer(String customerId) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.customers WHERE customer_id = '"+customerId+"'";
         Query.makeQuery(sqlStatement);
@@ -40,6 +45,12 @@ public class CustomerDoeImpl {
         return null;
     }
 
+    /**
+     * Gets customer record from DB that matches the passed name
+     * @param customerN
+     * @return
+     * @throws SQLException
+     */
     public static Customer getCustomerByName(String customerN) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.customers WHERE customer_name = '"+customerN+"'";
         Query.makeQuery(sqlStatement);
@@ -67,6 +78,11 @@ public class CustomerDoeImpl {
         return null;
     }
 
+    /**
+     * Gets all customer records from DB.
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Customer> getAllCustomers() throws SQLException {
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.customers";
@@ -96,6 +112,10 @@ public class CustomerDoeImpl {
         return allCustomers;
     }
 
+    /**
+     * Adds new customer to DB using the passed customer object.
+     * @param customer
+     */
     public static void addCustomer(Customer customer) {
         String customerName = customer.getName();
         String address = customer.getAddress();
@@ -114,6 +134,10 @@ public class CustomerDoeImpl {
 
     }
 
+    /**
+     * Updates customer record that matches the passed customer object
+     * @param customer
+     */
     public static void updateCustomer(Customer customer) {
 
         int customerID = customer.getCustomerID();
@@ -134,6 +158,10 @@ public class CustomerDoeImpl {
 
     }
 
+    /**
+     * Deletes customer record from DB that matches the passed ID.
+     * @param customerID
+     */
     public static void deleteCustomer(int customerID) {
         String sqlStatement = "DELETE FROM client_schedule.customers WHERE customer_id = '"+customerID+"'";
 

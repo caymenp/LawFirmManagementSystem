@@ -10,10 +10,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Month;
+
 /** Appointemnt DOE used for creation/updating/deleting Appointment objects from the DB*/
 
 public class AppointmentDoeImpl {
 
+    /** getAppointment
+     * Used to query a specific record based on the parameter passed
+     * @param appointmentID
+     * @return appointment record found
+     * @throws SQLException
+     */
     public static Appointment getAppointment(String appointmentID) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.appointments WHERE appointment_id = '"+appointmentID+"'";
         Query.makeQuery(sqlStatement);
@@ -44,6 +51,11 @@ public class AppointmentDoeImpl {
         return null;
     }
 
+    /**Get All Appointments
+     * Used to query the DB to get all appointment records.
+     * @return an Observable list of all Appointments
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAllAppointments() throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.appointments";
@@ -78,6 +90,13 @@ public class AppointmentDoeImpl {
         return allAppointments;
     }
 
+    /** Get Filtered Appointments
+     * Used to query the DB for records that are between two dates that are passed as params
+     * @param startDate - beginning date to query
+     * @param endDate - end date to query
+     * @return observable list of appointments that are between the two passed dates
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getFilteredAppointments(String startDate, String endDate) throws SQLException {
         ObservableList<Appointment> filteredAppointments = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.appointments WHERE Start BETWEEN '"+startDate+"' AND '"+endDate+"'";
@@ -110,6 +129,12 @@ public class AppointmentDoeImpl {
         return filteredAppointments;
     }
 
+    /** Get Customer Appointments
+     * Querys DB for appointments that include the passed customer id
+     * @param customerId - customer id to query
+     * @return observable list of customer appointments
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getCxAppointments(int customerId) throws SQLException {
         ObservableList<Appointment> customerAppointments = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.appointments WHERE customer_id = '"+customerId+"'";
@@ -142,6 +167,12 @@ public class AppointmentDoeImpl {
         return customerAppointments;
     }
 
+    /** Get Appointments By Contact
+     * returns a list of appointments that include the passed contactID
+     * @param contactid - contactID to query against
+     * @return observable list of appointments that match that contactID
+     * @throws SQLException
+     */
     public static ObservableList<Appointment> getAppointmentByContact(int contactid) throws SQLException {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.appointments WHERE contact_id = '"+contactid+"'";
@@ -175,6 +206,13 @@ public class AppointmentDoeImpl {
 
     }
 
+    /** Get Customer with Most Appointments
+     * Used for the report that provides the winning customer. Uses the passed Month record to get a count of appointments
+     * in that passed month by customer.
+     * @param month - month to check for largest number of appointments
+     * @return - String customer name
+     * @throws SQLException
+     */
     public static String getCustomerWithMostAppointments(Month month) throws SQLException {
         int monthN = month.getValue();
         String sqlStatement = "SELECT customer_id, COUNT(*) FROM client_schedule.appointments WHERE YEAR(start) = 2023 " +
@@ -197,6 +235,10 @@ public class AppointmentDoeImpl {
         return Customer.getCustomer(String.valueOf(winningCX)).getName() + " : " + String.valueOf(counter);
     }
 
+    /** Add Appointment
+     * Used to add passed appointment to the DB
+     * @param appointment
+     */
     public static void addAppointment(Appointment appointment) {
 
         String title = appointment.getTitle();
@@ -225,6 +267,10 @@ public class AppointmentDoeImpl {
 
     }
 
+    /**
+     * Used to update passed appointment in DB.
+     * @param appointment
+     */
     public static void updateAppointment(Appointment appointment) {
         int appointmentID = appointment.getAppointmentID();
 
@@ -251,6 +297,10 @@ public class AppointmentDoeImpl {
         Query.makeQuery(sqlStatement);
     }
 
+    /**
+     * Used to delete appointment in DB that matches the passed appointmentID.
+     * @param appointmentid
+     */
     public static void deleteAppointment(int appointmentid) {
         String sqlStatement = "DELETE FROM client_schedule.appointments WHERE appointment_id = '"+appointmentid+"'";
         Query.makeQuery(sqlStatement);

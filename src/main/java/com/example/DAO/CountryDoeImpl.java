@@ -10,7 +10,12 @@ import java.sql.Timestamp;
 /** Country DOE used for creation/updating/deleting country objects from the DB*/
 
 public class CountryDoeImpl {
-
+    /**
+     * Gets country from DB that matches the passed ID.
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public static Country getCountry(String id) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.countries WHERE country_id = '"+id+"'";
         Query.makeQuery(sqlStatement);
@@ -31,6 +36,11 @@ public class CountryDoeImpl {
         return null;
     }
 
+    /**
+     * Gets all country records from DB.
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Country> getAllCountries() throws SQLException {
         ObservableList<Country> allCountries = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.countries";

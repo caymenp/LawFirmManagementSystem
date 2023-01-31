@@ -9,7 +9,12 @@ import java.sql.SQLException;
 /** Contact DOE used for creation/updating/deleting Contact objects from the DB*/
 
 public class ContactDoeImpl {
-
+    /**
+     * Gets contact from DB that matches passed id.
+     * @param id
+     * @return
+     * @throws SQLException
+     */
     public static Contact getContact(String id) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.contacts WHERE contact_id = '"+id+"'";
 
@@ -28,6 +33,12 @@ public class ContactDoeImpl {
         return null;
     }
 
+    /**
+     * Gets contact from DB that matches the passed name.
+     * @param name
+     * @return
+     * @throws SQLException
+     */
     public static Contact getContactByName(String name) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.contacts WHERE contact_name = '"+name+"'";
 
@@ -46,6 +57,11 @@ public class ContactDoeImpl {
         return null;
     }
 
+    /**
+     * Gets all appointment records from the DB
+     * @return
+     * @throws SQLException
+     */
     public static ObservableList<Contact> getAllContacts() throws SQLException {
         ObservableList<Contact> allContacts = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.contacts";

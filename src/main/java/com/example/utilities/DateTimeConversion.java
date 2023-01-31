@@ -24,18 +24,17 @@ public class DateTimeConversion {
      * @return observableList of appointment times determined from EST time to local user time.
      */
     public static ObservableList<LocalTime> availableAppointmentTimes() {
-        ObservableList<String> estTimes = FXCollections.observableArrayList();
 
         LocalDate myLD = LocalDate.now();
-        LocalTime myLT = LocalTime.of(7, 0);
+        LocalTime myLT = LocalTime.of(8, 0);
         LocalDateTime myLDT = LocalDateTime.of(myLD,  myLT);
 
-        ZonedDateTime myZDT = ZonedDateTime.of(myLDT, currentZoneID);
+
+        ZonedDateTime etcZDT = ZonedDateTime.of(myLDT, etcZoneId);
+        ZonedDateTime localToEst = ZonedDateTime.ofInstant(etcZDT.toInstant(), currentZoneID);
 
 
-        ZonedDateTime etcZDT = ZonedDateTime.ofInstant(myZDT.toInstant(), etcZoneId);
-
-        LocalTime etcStartTime = etcZDT.toLocalTime();
+        LocalTime etcStartTime = localToEst.toLocalTime();
 
         ObservableList<LocalTime> appointmentTimesEST = FXCollections.observableArrayList();
 
@@ -44,16 +43,8 @@ public class DateTimeConversion {
             appointmentTimesEST.add(incrTime);
         }
 
-        ObservableList<LocalTime> appointmentTimesLocal = FXCollections.observableArrayList();
 
-        for (LocalTime lm : appointmentTimesEST) {
-            ZonedDateTime currentUserTimeAvailable = ZonedDateTime.of(LocalDate.now(), lm, etcZoneId);
-            ZonedDateTime availableTimeConv = ZonedDateTime.ofInstant(currentUserTimeAvailable.toInstant(), currentZoneID);
-            LocalTime localUserTimes = availableTimeConv.toLocalTime();
-            appointmentTimesLocal.add(localUserTimes);
-        }
-
-        return appointmentTimesLocal;
+        return appointmentTimesEST;
 
     }
 

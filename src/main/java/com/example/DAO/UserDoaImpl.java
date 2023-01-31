@@ -12,6 +12,13 @@ import java.sql.Timestamp;
 public class UserDoaImpl {
     public int currentUserID;
 
+    /**
+     * Returns a user record from the DB that matches the passed userName.
+     * @param userName
+     * @return
+     * @throws SQLException
+     * @throws Exception
+     */
     public static User getUser(String userName) throws SQLException, Exception{
         String sqlStatement = "SELECT * FROM client_schedule.users WHERE user_name = '"+userName+"'";
         Query.makeQuery(sqlStatement);
@@ -33,6 +40,13 @@ public class UserDoaImpl {
         return null;
     }
 
+    /**
+     * Returns a user record from the DB that matches the passed userID.
+     * @param userid
+     * @return
+     * @throws SQLException
+     * @throws Exception
+     */
     public static User getUser(int userid) throws SQLException, Exception{
         String sqlStatement = "SELECT * FROM client_schedule.users WHERE user_id = '"+userid+"'";
         Query.makeQuery(sqlStatement);
@@ -54,6 +68,12 @@ public class UserDoaImpl {
         return null;
     }
 
+    /**
+     * Returns a list of ALL user records in the DB.
+     * @return
+     * @throws SQLException
+     * @throws Exception
+     */
     public static ObservableList<User> getAllUsers() throws SQLException, Exception{
         ObservableList<User> allUsers = FXCollections.observableArrayList();
         String sqlStatement = "SELECT * FROM client_schedule.users";
@@ -76,6 +96,13 @@ public class UserDoaImpl {
         return allUsers;
     }
 
+    /**
+     * Used to verify the user login with the DB, matching a user record from the passed params.
+     * @param usernamePassed
+     * @param passwordPassed
+     * @return
+     * @throws SQLException
+     */
     public static User verifyUser(String usernamePassed, String passwordPassed) throws SQLException {
         String sqlStatement = "SELECT * FROM client_schedule.users WHERE user_name = '"+usernamePassed+"' AND password = '"+passwordPassed+"'";
         Query.makeQuery(sqlStatement);

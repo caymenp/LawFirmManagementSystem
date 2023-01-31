@@ -230,6 +230,10 @@ public class AppointmentFormController implements Initializable {
             validationAlert.errorMessage("Validation Error", "Appointment Start Time Must Occur BEFORE End Time");
             return;
         }
+        if (LocalTime.parse(startTimeList.getValue().toString()) == LocalTime.parse(endTimeList.getValue().toString())) {
+            validationAlert.errorMessage("Validation Error", "Appointment length must be at least 1 hour.");
+            return;
+        }
 
         Customer customer = Customer.getCustomerByName(customerList.getValue());
         Contact contact = Contact.getContactByName(contactList.getValue());
@@ -313,12 +317,21 @@ public class AppointmentFormController implements Initializable {
         for (Appointment ap : allCustomerAppointments) {
             LocalDateTime apStart = ap.getStartDateTime().toLocalDateTime();
             LocalDateTime apEnd = ap.getEndDateTime().toLocalDateTime();
-            if (newApStart.toLocalDate().equals(apStart.toLocalDate())) {
-                if (newApStart.isAfter(apStart) && newApEnd.isBefore(apEnd)) {
-                    return true;
-                } else if (newApStart.toLocalTime() == apStart.toLocalTime() || newApEnd.toLocalTime() == apEnd.toLocalTime()) {
-                    return true;
+
+            if (ap.getAppointmentID() == cxAP.getAppointmentID()) {
+                if (apStart.isEqual(newApStart) && apEnd.isEqual(newApEnd)) {
+                    continue;
                 }
+            }
+
+            if (newApStart.toLocalDate().equals(apStart.toLocalDate())) {
+                    if ((newApStart.isAfter(apStart) && newApEnd.isBefore(apEnd)) || (newApStart.isBefore(apStart) && newApEnd.isAfter(apEnd))) {
+                        return true;
+                    } else if (newApStart.toLocalTime() == apStart.toLocalTime() || newApEnd.toLocalTime() == apEnd.toLocalTime()) {
+                        return true;
+                    } else if ((apStart.isAfter(newApStart) && apStart.isBefore(newApEnd)) || (apStart.isBefore(newApStart) && apEnd.isAfter(newApEnd))) {
+                        return true;
+                    }
             }
         }
         return false;
