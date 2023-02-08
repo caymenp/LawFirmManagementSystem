@@ -17,6 +17,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -53,6 +55,8 @@ public class AppointmentsOverviewController implements Initializable {
     public RadioButton viewAllRadio;
     public Button changeTableView;
     public GridPane radioGroup;
+    public TextField searchBar;
+    public Button searchButton;
 
 
     //Customer Table
@@ -429,8 +433,8 @@ public class AppointmentsOverviewController implements Initializable {
      * toggle button is clicked.
      * @param viewType as String, hard coded values to the toggle group
      */
+    public ObservableList<Appointment> appointmentsView = FXCollections.observableArrayList();
     public void appointmentTableView(String viewType) {
-        ObservableList<Appointment> appointmentsView = FXCollections.observableArrayList();
 
         colAppID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         colAptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -456,6 +460,22 @@ public class AppointmentsOverviewController implements Initializable {
             appointmentsView = Appointment.getAllAppointments();
             appointmentTable.setItems(appointmentsView);
         }
+    }
+
+    public void appointmentTableView(ObservableList<Appointment> customSearch) {
+
+        colAppID.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
+        colAptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+        colAptDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
+        colAptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
+        colAptContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
+        colAptType.setCellValueFactory(new PropertyValueFactory<>("type"));
+        colAptStart.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
+        colAptEnd.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
+        colAptCXid.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        colAptUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+            appointmentTable.setItems(customSearch);
     }
 
     /**Toggle Group Calendar Filter For Appointment Table.
@@ -491,23 +511,26 @@ public class AppointmentsOverviewController implements Initializable {
             radioGroup.setVisible(false);
             appointmentTable.setVisible(false);
             customerTable.setVisible(true);
+            searchBar.setPromptText("Search By Customer Name");
             changeTableView.setText("View Appointments");
             appointmentTable.getSelectionModel().clearSelection();
             return;
+        } else {
+
+            radioGroup.setVisible(true);
+            customerTable.setVisible(false);
+            appointmentTable.setVisible(true);
+            searchBar.setPromptText("Search By Appointment Title");
+            customerTable.getSelectionModel().clearSelection();
+            appointmentTableView("viewAll");
+            changeTableView.setText("View Customers");
         }
-
-        radioGroup.setVisible(true);
-        customerTable.setVisible(false);
-        appointmentTable.setVisible(true);
-        customerTable.getSelectionModel().clearSelection();
-        appointmentTableView("viewAll");
-        changeTableView.setText("View Customers");
-
     }
 
     /** Initializes Customer Table.
      * Maps the column values of the customer table to the observable list recieved from the method call to Customer.getAllCustomers().
      */
+    public ObservableList<Customer> customerView = FXCollections.observableArrayList();
     public void customerTableView() {
 
         cxColID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
@@ -521,7 +544,25 @@ public class AppointmentsOverviewController implements Initializable {
         cxColUpdateBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
         cxColDivision.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
 
-        customerTable.setItems(Customer.getAllCustomers());
+        customerView = Customer.getAllCustomers();
+        customerTable.setItems(customerView);
+    }
+
+    public void customerTableView(ObservableList<Customer> customList) {
+
+        cxColID.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        cxColName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        cxColAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        cxColZip.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        cxColPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        cxColCreateDate.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        cxColCreateBy.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        cxColUpdateTime.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
+        cxColUpdateBy.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
+        cxColDivision.setCellValueFactory(new PropertyValueFactory<>("divisionName"));
+
+        customerView = Customer.getAllCustomers();
+        customerTable.setItems(customList);
     }
 
     /** Upcoming Appointment Alert (15 Minutes).
@@ -567,8 +608,93 @@ public class AppointmentsOverviewController implements Initializable {
         customerTableView();
         appointmentTableView("viewAll");
 
+    }
 
+    /**
+     * Search Functionality Feature
+     * @param actionEvent
+     */
+    public String searchInput = "";
+    public void searchBar(ActionEvent actionEvent) {
 
     }
 
+    public void searchButton(ActionEvent actionEvent) {
+    }
+
+    public void searchBarClicked(MouseEvent event) {
+    }
+
+    public void searchType(KeyEvent keyEvent) {
+        ObservableList<Customer> searchResultsCX = FXCollections.observableArrayList();
+        ObservableList<Appointment> searchResultsAP = FXCollections.observableArrayList();
+        searchButton.setVisible(true);
+        searchInput = searchBar.getText();
+
+        if (customerTable.isVisible()) {
+            for (Customer cx : customerView) {
+                if (cx.getName().toLowerCase().contains(searchInput.toLowerCase())) searchResultsCX.add(cx);
+            }
+            customerTableView(searchResultsCX);
+        }
+
+        if (appointmentTable.isVisible()) {
+            for (Appointment ap : appointmentsView) {
+                if (ap.getTitle().toLowerCase().contains(searchInput.toLowerCase())) searchResultsAP.add(ap);
+            }
+            appointmentTableView(searchResultsAP);
+        }
+    }
+
+    public void clientMeeting(Appointment selectedAppointment, int cxID) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/appointmentmanager/ClientMeeting-view.fxml"));
+
+        loader.load();
+
+
+        ClientMeetingController cmc = loader.getController();
+        cmc.getData(selectedAppointment, cxID);
+
+        //New Window(Stage)
+        Stage reportWindow = new Stage();
+        Parent formScene = loader.getRoot();
+        reportWindow.setTitle("Client Meeting");
+        reportWindow.setScene(new Scene(formScene));
+
+        //Modality For New Window
+        reportWindow.initModality(Modality.WINDOW_MODAL);
+
+        //Owner stage
+        Stage mainStage = (Stage) deleteAppointment.getScene().getWindow();
+        reportWindow.initOwner(mainStage);
+
+        //Set Position Of New Window
+        reportWindow.setX(mainStage.getX()+20);
+        reportWindow.setY(mainStage.getY()+20);
+
+        reportWindow.showAndWait();
+
+        mainCalendar.selectToggle(viewAllRadio);
+        appointmentTableView("viewAll");
+    }
+
+    public void tableClick(MouseEvent event) {
+        if (event.getClickCount() >= 2) {
+            Appointment appointment = appointmentTable.getSelectionModel().getSelectedItem();
+            if (appointment == null) {
+                return;
+            }
+
+            int selectedCustomerID = appointment.getCustomerID();
+            try {
+                clientMeeting(appointment, selectedCustomerID);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        }
+
+    }
 }

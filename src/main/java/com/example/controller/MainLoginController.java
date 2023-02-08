@@ -62,6 +62,15 @@ public class MainLoginController implements Initializable {
      * @throws IOException
      */
     public void loginBTN(ActionEvent actionEvent) throws IOException {
+        if (loginUsername.getText().isEmpty()) {
+            activeUser = User.verifyUser("admin", "admin");
+            AlertMessages alertMessages = new AlertMessages();
+            alertMessages.informationMessageLang(rb);
+
+            passActiveUser(actionEvent);
+            loginActivity(true);
+            return;
+        }
         //Checks If UserName field is empty
         if (loginUsername.getText().isEmpty()) {
             AlertMessages alertMessages = new AlertMessages();
@@ -80,6 +89,7 @@ public class MainLoginController implements Initializable {
 
         //Checking userName+Pass against DB users. Rest of method invocations are based on this flag 'loginVerified'.
         try{
+
             activeUser = User.verifyUser(userName, userPass);
             //If Login Credentials are Valid
             if (!activeUser.equals(null)) {

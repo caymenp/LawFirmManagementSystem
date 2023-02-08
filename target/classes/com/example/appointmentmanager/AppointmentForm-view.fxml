@@ -56,7 +56,7 @@
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <Text layoutX="10.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact:" wrappingWidth="174.21630859375" GridPane.rowIndex="5">
+                  <Text layoutX="10.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assigned Associate:" wrappingWidth="174.21630859375" GridPane.rowIndex="5">
                      <font>
                         <Font size="19.0" />
                      </font>
@@ -77,7 +77,7 @@
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <Text layoutX="10.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer ID:" wrappingWidth="174.21630859375" GridPane.rowIndex="6">
+                  <Text layoutX="10.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer:" wrappingWidth="174.21630859375" GridPane.rowIndex="6">
                      <font>
                         <Font size="19.0" />
                      </font>

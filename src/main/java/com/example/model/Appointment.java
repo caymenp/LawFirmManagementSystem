@@ -27,6 +27,7 @@ public class Appointment {
     private int customerID;
     private int userID;
     private int contactID;
+    private String appointmentNote;
 
     /** New Appointment Contructor.
      * Takes all the params from the DB values, to create appointment objects from the DB.
@@ -64,6 +65,28 @@ public class Appointment {
         this.customerID = customerID;
         this.userID = userID;
         this.contactID = contactID;
+    }
+
+    public Appointment(int appointmentID, String title, String description,
+                       String location, String type, Timestamp startDateTime,
+                       Timestamp endDateTime, Timestamp createDateTime, String createdBy,
+                       Timestamp lastUpdate, String lastUpdatedBy, int customerID,
+                       int userID, int contactID, String appointmentNote) {
+        this.appointmentID = appointmentID;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.startDateTime = DateTimeConversion.getUserDisplayTime(startDateTime);
+        this.endDateTime = DateTimeConversion.getUserDisplayTime(endDateTime);
+        this.createDateTime = DateTimeConversion.getUserDisplayTime(createDateTime);
+        this.createdBy = createdBy;
+        this.lastUpdate = DateTimeConversion.getUserDisplayTime(lastUpdate);
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.customerID = customerID;
+        this.userID = userID;
+        this.contactID = contactID;
+        this.appointmentNote = appointmentNote;
     }
 
     /** Update Appointment Constructor.
@@ -176,6 +199,10 @@ public class Appointment {
         return contactID;
     }
 
+    public String getAppointmentNote() {
+        return appointmentNote;
+    }
+
     //Setters
 
     public void setAppointmentID(int appointmentID) {
@@ -234,6 +261,9 @@ public class Appointment {
         this.contactID = contactID;
     }
 
+    public void setAppointmentNote(String appointmentNote) {
+        this.appointmentNote = appointmentNote;
+    }
 
     /** Get All Appointments (In User Local Time).
      * Used to query the DB for ALL appointments and are stored in an Observable list.

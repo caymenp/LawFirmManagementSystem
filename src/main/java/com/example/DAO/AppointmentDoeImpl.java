@@ -157,10 +157,11 @@ public class AppointmentDoeImpl {
             int customerID = result.getInt("customer_id");
             int userID = result.getInt("user_id");
             int contactID = result.getInt("contact_id");
+            String appointmentNote = result.getString("appointment_note");
 
             appointment = new Appointment(appointment_ID, title, description, location, type, startDateTime,
                     endDateTime, createDateTime, createdBy, lastUpdate,
-                    lastUpdatedBy, customerID, userID, contactID);
+                    lastUpdatedBy, customerID, userID, contactID, appointmentNote);
 
             customerAppointments.add(appointment);
         }
