@@ -2,7 +2,6 @@ package com.example.DAO;
 
 import com.example.model.Appointment;
 import com.example.model.Customer;
-import com.example.utilities.DateTimeConversion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -41,11 +40,11 @@ public class AppointmentDoeImpl {
             String lastUpdatedBy = result.getString("last_updated_by");
             int customerID = result.getInt("customer_id");
             int userID = result.getInt("user_id");
-            int contactID = result.getInt("contact_id");
+            String appointmentNote = result.getString("appointment_note");
 
             appointment = new Appointment(appointment_ID, title, description, location, type, startDateTime,
                     endDateTime, createDateTime, createdBy, lastUpdate,
-                    lastUpdatedBy, customerID, userID, contactID);
+                    lastUpdatedBy, customerID, userID, appointmentNote);
             return appointment;
         }
         return null;
@@ -77,11 +76,11 @@ public class AppointmentDoeImpl {
             String lastUpdatedBy = result.getString("last_updated_by");
             int customerID = result.getInt("customer_id");
             int userID = result.getInt("user_id");
-            int contactID = result.getInt("contact_id");
+            String appointmentNote = result.getString("appointment_note");
 
                     appointment = new Appointment(appointment_ID, title, description, location, type, startDateTime,
                             endDateTime, createDateTime, createdBy, lastUpdate,
-                            lastUpdatedBy, customerID, userID, contactID);
+                            lastUpdatedBy, customerID, userID, appointmentNote);
 
 
                 allAppointments.add(appointment);
@@ -118,11 +117,11 @@ public class AppointmentDoeImpl {
             String lastUpdatedBy = result.getString("last_updated_by");
             int customerID = result.getInt("customer_id");
             int userID = result.getInt("user_id");
-            int contactID = result.getInt("contact_id");
+            String appointmentNote = result.getString("appointment_note");
 
             appointment = new Appointment(appointment_ID, title, description, location, type, startDateTime,
                     endDateTime, createDateTime, createdBy, lastUpdate,
-                    lastUpdatedBy, customerID, userID, contactID);
+                    lastUpdatedBy, customerID, userID, appointmentNote);
 
                 filteredAppointments.add(appointment);
         }
@@ -156,12 +155,11 @@ public class AppointmentDoeImpl {
             String lastUpdatedBy = result.getString("last_updated_by");
             int customerID = result.getInt("customer_id");
             int userID = result.getInt("user_id");
-            int contactID = result.getInt("contact_id");
             String appointmentNote = result.getString("appointment_note");
 
             appointment = new Appointment(appointment_ID, title, description, location, type, startDateTime,
                     endDateTime, createDateTime, createdBy, lastUpdate,
-                    lastUpdatedBy, customerID, userID, contactID, appointmentNote);
+                    lastUpdatedBy, customerID, userID, appointmentNote);
 
             customerAppointments.add(appointment);
         }
@@ -195,11 +193,11 @@ public class AppointmentDoeImpl {
             String lastUpdatedBy = result.getString("last_updated_by");
             int customerID = result.getInt("customer_id");
             int userID = result.getInt("user_id");
-            int contactID = result.getInt("contact_id");
+            String appointmentNote = result.getString("appointment_note");
 
             appointment = new Appointment(appointment_ID, title, description, location, type, startDateTime,
                     endDateTime, createDateTime, createdBy, lastUpdate,
-                    lastUpdatedBy, customerID, userID, contactID);
+                    lastUpdatedBy, customerID, userID, appointmentNote);
 
             allAppointments.add(appointment);
         }
@@ -233,7 +231,7 @@ public class AppointmentDoeImpl {
             }
         }
         if (winningCX == 0) return null;
-        return Customer.getCustomer(String.valueOf(winningCX)).getName() + " : " + String.valueOf(counter);
+        return Customer.getCustomer(String.valueOf(winningCX)).getName() + " : " + counter;
     }
 
     /** Add Appointment
@@ -246,23 +244,22 @@ public class AppointmentDoeImpl {
         String description = appointment.getDescription();
         String location = appointment.getLocation();
         String type = appointment.getType();
-        Timestamp startDateTime = DateTimeConversion.saveToDB(appointment.getStartDateTime());
-        Timestamp endDateTime = DateTimeConversion.saveToDB(appointment.getEndDateTime());
-        Timestamp createdDate = DateTimeConversion.saveToDB(appointment.getCreateDateTime());
+        Timestamp startDateTime = appointment.getStartDateTime();
+        Timestamp endDateTime = appointment.getEndDateTime();
+        Timestamp createdDate = appointment.getCreateDateTime();
         String createdBy = appointment.getCreatedBy();
-        Timestamp lastUpdated = DateTimeConversion.saveToDB(appointment.getLastUpdate());
+        Timestamp lastUpdated = appointment.getLastUpdate();
         String lastUpdatedBy = appointment.getLastUpdatedBy();
         int customerID = appointment.getCustomerID();
         int userID = appointment.getUserID();
-        int contactID = appointment.getContactID();
 
 
 
         String sqlStatement = "INSERT INTO client_schedule.appointments (title, description, location, type, start, end, " +
-                "create_date, created_by, last_update, last_updated_by, customer_id, user_id, contact_id)"+
+                "create_date, created_by, last_update, last_updated_by, customer_id, user_id)"+
                 "VALUES ('"+title+"', '"+description+"', '"+location+"', '"+type+"', '"+startDateTime+"', " +
                 "'"+endDateTime+"', '"+createdDate+"', '"+createdBy+"', '"+lastUpdated+"', '"+lastUpdatedBy+"', " +
-                "'"+customerID+"', '"+userID+"', '"+contactID+"')";
+                "'"+customerID+"', '"+userID+"')";
 
         Query.makeQuery(sqlStatement);
 
@@ -279,21 +276,32 @@ public class AppointmentDoeImpl {
         String description = appointment.getDescription();
         String location = appointment.getLocation();
         String type = appointment.getType();
-        Timestamp startDateTime = DateTimeConversion.saveToDB(appointment.getStartDateTime());
-        Timestamp endDateTime = DateTimeConversion.saveToDB(appointment.getEndDateTime());
-        Timestamp lastUpdated = DateTimeConversion.saveToDB(appointment.getLastUpdate());
+        Timestamp startDateTime = appointment.getStartDateTime();
+        Timestamp endDateTime = appointment.getEndDateTime();
+        Timestamp lastUpdated = appointment.getLastUpdate();
         String lastUpdatedBy = appointment.getLastUpdatedBy();
         int customerID = appointment.getCustomerID();
         int userID = appointment.getUserID();
-        int contactID = appointment.getContactID();
 
 
 
         String sqlStatement = "UPDATE client_schedule.appointments " +
                 "SET title = '"+title+"', description = '"+description+"', location = '"+location+"', " +
                 "type = '"+type+"', start = '"+startDateTime+"', end = '"+endDateTime+"', last_update = '"+lastUpdated+"', " +
-                "last_updated_by = '"+lastUpdatedBy+"', customer_id = '"+customerID+"', user_id = '"+userID+"', " +
-                "contact_id = '"+contactID+"' WHERE appointment_id = '"+appointmentID+"'";
+                "last_updated_by = '"+lastUpdatedBy+"', customer_id = '"+customerID+"', user_id = '"+userID+"' WHERE appointment_id = '"+appointmentID+"'";
+
+        Query.makeQuery(sqlStatement);
+    }
+
+    public static void updateMeeting(Appointment appointment) {
+        int appointmentID = appointment.getAppointmentID();
+        String type = appointment.getType();
+        Timestamp lastUpdated = appointment.getLastUpdate();
+        String lastUpdatedBy = appointment.getLastUpdatedBy();
+        String appointmentNote = appointment.getAppointmentNote();
+
+        String sqlStatement = "UPDATE client_schedule.appointments " +
+                "SET type = '"+type+"', last_update = '"+lastUpdated+"', last_updated_by = '"+lastUpdatedBy+"', appointment_note = '"+appointmentNote+"' WHERE appointment_id = '"+appointmentID+"'";
 
         Query.makeQuery(sqlStatement);
     }

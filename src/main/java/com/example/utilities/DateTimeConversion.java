@@ -11,11 +11,11 @@ import java.time.format.DateTimeFormatter;
 public class DateTimeConversion {
 
     //UTC ZONE ID
-    private static ZoneId utcZoneID = ZoneId.of("UTC");
+    private static final ZoneId utcZoneID = ZoneId.of("UTC");
     //EST ZONE ID
-    private static ZoneId etcZoneId = ZoneId.of("America/New_York");
+    private static final ZoneId etcZoneId = ZoneId.of("America/New_York");
     // USERS SYSTEM DEFAULT ZONE IF
-    private static ZoneId currentZoneID = ZoneId.systemDefault();
+    private static final ZoneId currentZoneID = ZoneId.systemDefault();
 
     /**Available Appointment Times.
      * This method creates a list of available appointment times to be displayed for user selection based on the available

@@ -13,8 +13,8 @@ public abstract class JDBC {
     private static final String databaseName = "client_schedule";
     private static final String url = "jdbc:mysql://caymenpope.mysql.database.azure.com:3306/client_schedule?useSSL=true";
     private static final String driver = "com.mysql.cj.jdbc.Driver"; // Driver reference
-    private static String userName = "caymenpope"; // Username
-    private static String password = "Tiffanie2022!!"; // Password
+    private static final String userName = "caymenpope"; // Username
+    private static final String password = "Tiffanie2022!!"; // Password
     public static Connection connection;  // Connection Interface
 
     //Opens DB Connection

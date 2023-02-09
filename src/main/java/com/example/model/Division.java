@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 /** Division Class used for creation/updating/deleting Division objects from the DB*/
 
-public class Division{
+public class Division extends Country {
 
     private int divisionID;
     private String divisionName;

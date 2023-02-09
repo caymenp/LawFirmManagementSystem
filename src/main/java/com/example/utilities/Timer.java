@@ -6,7 +6,7 @@ public class Timer {
 
     public boolean running = false;
     private int time = 0;
-    private LocalTime startTime = LocalTime.now();
+    private final LocalTime startTime = LocalTime.now();
     public void start() throws InterruptedException {
         LocalTime newTime = LocalTime.now();
         running = true;

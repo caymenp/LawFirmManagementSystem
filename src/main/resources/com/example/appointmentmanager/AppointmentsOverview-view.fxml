@@ -43,7 +43,7 @@
                   <Font size="15.0" />
                </font>
             </Text>
-            <Button fx:id="reports" layoutX="60.0" layoutY="645.0" mnemonicParsing="false" onAction="#reports" prefHeight="40.0" prefWidth="243.0" text="REPORTS">
+            <Button fx:id="reports" layoutX="60.0" layoutY="668.0" mnemonicParsing="false" onAction="#reports" prefHeight="40.0" prefWidth="243.0" text="REPORTS">
                <font>
                   <Font size="20.0" />
                </font>
@@ -80,6 +80,11 @@
             </Button>
             <Line endX="214.0" layoutX="144.0" layoutY="350.0" startX="-145.0" />
             <Line endX="214.0" layoutX="147.0" layoutY="607.0" startX="-148.0" />
+            <Button fx:id="manageUsers" layoutX="60.0" layoutY="619.0" mnemonicParsing="false" onAction="#manageUsers" prefHeight="40.0" prefWidth="243.0" text="MANAGE USERS">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="1150.0" prefHeight="798.0" prefWidth="1050.0">
          <children>
@@ -87,14 +92,13 @@
               <columns>
                 <TableColumn fx:id="colAppID" prefWidth="64.0" text="ID" />
                 <TableColumn fx:id="colAptTitle" prefWidth="152.0" text="TITLE" />
-                  <TableColumn fx:id="colAptDesc" minWidth="0.0" prefWidth="148.0" text="DESCRIPTION" />
-                  <TableColumn fx:id="colAptLocation" minWidth="9.0" prefWidth="103.0" text="LOCATION" />
-                  <TableColumn fx:id="colAptContact" prefWidth="98.0" text="CONTACT" />
-                  <TableColumn fx:id="colAptType" minWidth="1.0" prefWidth="127.0" text="TYPE" />
-                  <TableColumn fx:id="colAptStart" prefWidth="129.0" text="START" />
-                  <TableColumn fx:id="colAptEnd" prefWidth="129.0" text="END" />
-                  <TableColumn fx:id="colAptCXid" prefWidth="89.0" text="CUSTOMER ID" />
-                  <TableColumn fx:id="colAptUserID" prefWidth="117.0" text="USER ID" />
+                  <TableColumn fx:id="colAptDesc" minWidth="0.0" prefWidth="173.0" text="DESCRIPTION" />
+                  <TableColumn fx:id="colAptLocation" minWidth="9.0" prefWidth="107.0" text="LOCATION" />
+                  <TableColumn fx:id="colAptType" minWidth="1.0" prefWidth="135.0" text="Case Status" />
+                  <TableColumn fx:id="colAptStart" prefWidth="125.0" text="START" />
+                  <TableColumn fx:id="colAptEnd" prefWidth="124.0" text="END" />
+                  <TableColumn fx:id="colAptCXid" prefWidth="104.0" text="CUSTOMER ID" />
+                  <TableColumn fx:id="colAptUserID" prefWidth="155.0" text="Assigned Associate" />
               </columns>
             </TableView>
             <Button fx:id="changeTableView" layoutX="36.0" layoutY="12.0" mnemonicParsing="false" onAction="#changeTableView" prefHeight="40.0" prefWidth="168.0" text="View Clients">

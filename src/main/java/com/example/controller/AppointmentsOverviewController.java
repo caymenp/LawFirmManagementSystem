@@ -57,6 +57,7 @@ public class AppointmentsOverviewController implements Initializable {
     public GridPane radioGroup;
     public TextField searchBar;
     public Button searchButton;
+    public Button manageUsers;
 
 
     //Customer Table
@@ -98,8 +99,6 @@ public class AppointmentsOverviewController implements Initializable {
     private TableColumn<?, ?> colAptDesc;
     @FXML
     private TableColumn<?, ?> colAptLocation;
-    @FXML
-    private TableColumn<?, ?> colAptContact;
     @FXML
     private TableColumn<?, ?> colAptType;
     @FXML
@@ -388,18 +387,18 @@ public class AppointmentsOverviewController implements Initializable {
     public void reports(ActionEvent actionEvent) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/appointmentmanager/Reports-view.fxml"));
+        loader.setLocation(getClass().getResource("/com/example/appointmentmanager/ReportGenerator-view.fxml"));
 
         loader.load();
 
 
-        ReportController rc = loader.getController();
+        ReportGeneratorController rpc = loader.getController();
 
 
         //New Window(Stage)
         Stage reportWindow = new Stage();
         Parent formScene = loader.getRoot();
-        reportWindow.setTitle("Reports");
+        reportWindow.setTitle("Report Generator");
         reportWindow.setScene(new Scene(formScene));
 
         //Modality For New Window
@@ -440,12 +439,11 @@ public class AppointmentsOverviewController implements Initializable {
         colAptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colAptDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
         colAptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        colAptContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
         colAptType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colAptStart.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
         colAptEnd.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
-        colAptCXid.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        colAptUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        colAptCXid.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        colAptUserID.setCellValueFactory(new PropertyValueFactory<>("assignedAssociateName"));
 
         if (viewType == "viewMonth") {
             LocalDate startDate = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
@@ -468,12 +466,11 @@ public class AppointmentsOverviewController implements Initializable {
         colAptTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colAptDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
         colAptLocation.setCellValueFactory(new PropertyValueFactory<>("location"));
-        colAptContact.setCellValueFactory(new PropertyValueFactory<>("contactID"));
         colAptType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colAptStart.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
         colAptEnd.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
-        colAptCXid.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        colAptUserID.setCellValueFactory(new PropertyValueFactory<>("userID"));
+        colAptCXid.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        colAptUserID.setCellValueFactory(new PropertyValueFactory<>("assignedAssociateName"));
 
             appointmentTable.setItems(customSearch);
     }
@@ -506,16 +503,16 @@ public class AppointmentsOverviewController implements Initializable {
     public void changeTableView(ActionEvent actionEvent) {
         String changeView = changeTableView.getText();
 
-        if (changeView.equals("View Customers")) {
+        if (changeView.equals("View Clients")) {
             customerTableView();
             radioGroup.setVisible(false);
             appointmentTable.setVisible(false);
             customerTable.setVisible(true);
-            searchBar.setPromptText("Search By Customer Name");
+            searchBar.setPromptText("Search By Client Name");
             changeTableView.setText("View Appointments");
             appointmentTable.getSelectionModel().clearSelection();
             return;
-        } else {
+        }
 
             radioGroup.setVisible(true);
             customerTable.setVisible(false);
@@ -523,8 +520,7 @@ public class AppointmentsOverviewController implements Initializable {
             searchBar.setPromptText("Search By Appointment Title");
             customerTable.getSelectionModel().clearSelection();
             appointmentTableView("viewAll");
-            changeTableView.setText("View Customers");
-        }
+            changeTableView.setText("View Clients");
     }
 
     /** Initializes Customer Table.
@@ -586,7 +582,7 @@ public class AppointmentsOverviewController implements Initializable {
                 LocalTime timerBuffer = appointmentStart.toLocalTime().minusMinutes(15);
                 if (currentUserTime.toLocalTime().isAfter(timerBuffer) && currentUserTime.toLocalTime().isBefore(appointmentStart.toLocalTime())) {
                     alertMessages.informationMessage("Upcoming Appointment", "Appointment: "
-                            +String.valueOf(a.getAppointmentID())+ "\n" + "Scheduled for: "+a.getStartDateTime()+"\n"+
+                            + a.getAppointmentID() + "\n" + "Scheduled for: "+a.getStartDateTime()+"\n"+
                             "Is starting within 15 minutes from now.");
                     return;
                 }
@@ -647,6 +643,14 @@ public class AppointmentsOverviewController implements Initializable {
     }
 
     public void clientMeeting(Appointment selectedAppointment, int cxID) throws IOException {
+
+        if (selectedAppointment.getUserID() != loggedInUser.getUserID()) {
+            AlertMessages alertMessages = new AlertMessages();
+            alertMessages.errorMessage("Permission Error", "You do not have the user permissions " +
+                    "to view this client appointment. \n Please contact your administrator for more information.");
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/com/example/appointmentmanager/ClientMeeting-view.fxml"));
 
@@ -654,7 +658,7 @@ public class AppointmentsOverviewController implements Initializable {
 
 
         ClientMeetingController cmc = loader.getController();
-        cmc.getData(selectedAppointment, cxID);
+        cmc.getData(selectedAppointment, cxID, loggedInUser);
 
         //New Window(Stage)
         Stage reportWindow = new Stage();
@@ -695,6 +699,42 @@ public class AppointmentsOverviewController implements Initializable {
 
 
         }
+
+    }
+    public void manageUsers(ActionEvent actionEvent) throws IOException {
+        if (loggedInUser.getUserID() == 1) {
+            AlertMessages alertMessages = new AlertMessages();
+            alertMessages.errorMessage("Cannot Access", "Your user permissions do not allow access to " +
+                    "the User Management Dashboard. \n Please contact your administrator, if you feel this is an error.");
+            return;
+        }
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/appointmentmanager/UserManagement-view.fxml"));
+
+        loader.load();
+
+
+        UserManagementDashboardController umd = loader.getController();
+        umd.getData(loggedInUser);
+
+        //New Window(Stage)
+        Stage reportWindow = new Stage();
+        Parent formScene = loader.getRoot();
+        reportWindow.setTitle("User Management Dashboard");
+        reportWindow.setScene(new Scene(formScene));
+
+        //Modality For New Window
+        reportWindow.initModality(Modality.WINDOW_MODAL);
+
+        //Owner stage
+        Stage mainStage = (Stage) deleteAppointment.getScene().getWindow();
+        reportWindow.initOwner(mainStage);
+
+        //Set Position Of New Window
+        reportWindow.setX(mainStage.getX()+20);
+        reportWindow.setY(mainStage.getY()+20);
+
+        reportWindow.showAndWait();
 
     }
 }

@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 /** Customer Class used for creation/updating/deleting customer objects from the DB*/
 
-public class Customer {
+public class Customer extends Division {
 
     private int customerID;
     private String name;

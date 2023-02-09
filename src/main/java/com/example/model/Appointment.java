@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 /** Appointemnt Class used for creation/updating/deleting Appointment objects from the DB*/
-public class Appointment {
+public class Appointment extends Customer {
 
     private int appointmentID;
     private String title;
@@ -28,6 +28,8 @@ public class Appointment {
     private int userID;
     private int contactID;
     private String appointmentNote;
+    private String assignedAssociateName;
+    private String customerName;
 
     /** New Appointment Contructor.
      * Takes all the params from the DB values, to create appointment objects from the DB.
@@ -44,13 +46,12 @@ public class Appointment {
      * @param lastUpdatedBy
      * @param customerID
      * @param userID
-     * @param contactID
      */
     public Appointment(int appointmentID, String title, String description,
                        String location, String type, Timestamp startDateTime,
                        Timestamp endDateTime, Timestamp createDateTime, String createdBy,
                        Timestamp lastUpdate, String lastUpdatedBy, int customerID,
-                       int userID, int contactID) {
+                       int userID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -64,14 +65,15 @@ public class Appointment {
         this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
-        this.contactID = contactID;
+        this.customerName = Customer.getCustomer(String.valueOf(customerID)).getName();
+        this.assignedAssociateName = User.getUser(userID).getUserName();
     }
 
     public Appointment(int appointmentID, String title, String description,
                        String location, String type, Timestamp startDateTime,
                        Timestamp endDateTime, Timestamp createDateTime, String createdBy,
                        Timestamp lastUpdate, String lastUpdatedBy, int customerID,
-                       int userID, int contactID, String appointmentNote) {
+                       int userID, String appointmentNote) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -85,8 +87,9 @@ public class Appointment {
         this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
-        this.contactID = contactID;
         this.appointmentNote = appointmentNote;
+        this.customerName = Customer.getCustomer(String.valueOf(customerID)).getName();
+        this.assignedAssociateName = User.getUser(userID).getUserName();
     }
 
     /** Update Appointment Constructor.
@@ -102,11 +105,10 @@ public class Appointment {
      * @param lastUpdatedBy
      * @param customerID
      * @param userID
-     * @param contactID
      */
     public Appointment(int appointmentID, String title, String description, String location,
                        String type, Timestamp startDateTime, Timestamp endDateTime, Timestamp lastUpdate,
-                       String lastUpdatedBy, int customerID, int userID, int contactID) {
+                       String lastUpdatedBy, int customerID, int userID) {
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
@@ -118,14 +120,15 @@ public class Appointment {
         this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
-        this.contactID = contactID;
+        this.customerName = Customer.getCustomer(String.valueOf(customerID)).getName();
+        this.assignedAssociateName = User.getUser(userID).getUserName();
     }
 
     public Appointment(String title, String description,
                        String location, String type, Timestamp startDateTime,
                        Timestamp endDateTime, Timestamp createDateTime, String createdBy,
                        Timestamp lastUpdate, String lastUpdatedBy, int customerID,
-                       int userID, int contactID) {
+                       int userID) {
         this.title = title;
         this.description = description;
         this.location = location;
@@ -138,10 +141,29 @@ public class Appointment {
         this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
-        this.contactID = contactID;
+        this.customerName = Customer.getCustomer(String.valueOf(customerID)).getName();
+        this.assignedAssociateName = User.getUser(userID).getUserName();
     }
 
+    public Appointment(int appointmentID, String type, Timestamp lastUpdate, String lastUpdatedBy, String appointmentNote) {
+        this.appointmentID = appointmentID;
+        this.type = type;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.appointmentNote = appointmentNote;
+    }
+
+
     //Getters
+
+
+    public String getAssignedAssociateName() {
+        return assignedAssociateName;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
 
     public int getAppointmentID() {
         return appointmentID;
@@ -265,6 +287,14 @@ public class Appointment {
         this.appointmentNote = appointmentNote;
     }
 
+    public void setAssignedAssociateName(String assignedAssociateName) {
+        this.assignedAssociateName = assignedAssociateName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
     /** Get All Appointments (In User Local Time).
      * Used to query the DB for ALL appointments and are stored in an Observable list.
      * @return list of appointments
@@ -314,6 +344,19 @@ public class Appointment {
     public static void updateAppointment(Appointment appointment) {
         try{
             AppointmentDoeImpl.updateAppointment(appointment);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    /** Modify Appointment.
+     * Takes an Appointment object to send to the DB to be updated in the appointment table.
+     * @param appointment existing appointment object to be updated
+     */
+    public static void updateMeeting(Appointment appointment) {
+        try{
+            AppointmentDoeImpl.updateMeeting(appointment);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -30,7 +30,7 @@ public class MainLogin extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         ResourceBundle rb = ResourceBundle.getBundle("com.example.appointmentmanager.localization.mainLoginUI", Locale.getDefault());
-        Parent root = fxmlLoader.load(getClass().getResource("/com/example/appointmentmanager/MainLogin-view.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/com/example/appointmentmanager/MainLogin-view.fxml"));
 
         Scene scene = new Scene(root, 800, 600);
         stage.setTitle(rb.getString("mainLabel"));

@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.model.Appointment;
-import com.example.model.Contact;
 import com.example.model.Customer;
 import com.example.model.User;
 import com.example.utilities.AlertMessages;
@@ -34,17 +33,15 @@ public class AppointmentFormController implements Initializable {
     @FXML
     private TextField appointmentDescription;
     @FXML
-    private ComboBox<String> contactList;
+    private ComboBox<String> assignedAssociate;
     @FXML
     private TextField appointmentLocation;
-    @FXML
-    private TextField appointmentType;
     @FXML
     private DatePicker startDate;
     @FXML
     private ComboBox<String> customerList;
     @FXML
-    private ComboBox<String> userIDList;
+    private ComboBox<String> caseStatusList;
     @FXML
     private DatePicker endDate;
     @FXML
@@ -60,6 +57,7 @@ public class AppointmentFormController implements Initializable {
     Appointment passApt;
     User passUser;
 
+    Customer followUpAPCX;
     /**
      * Gets data passed from the AppointmentOverviewForm.
      * When the scene changes from the main stage (AppointmentOverview) from am action event, this method gets all the
@@ -73,9 +71,6 @@ public class AppointmentFormController implements Initializable {
         passApt = passedApt;
         passUser = user;
 
-        String aptContactID = String.valueOf(passApt.getContactID());
-        Contact passedContact = Contact.getContact(aptContactID);
-
         String customerID = String.valueOf(passApt.getCustomerID());
         Customer passedCustomer;
         passedCustomer = Customer.getCustomer(customerID);
@@ -84,14 +79,15 @@ public class AppointmentFormController implements Initializable {
         appointmentTitle.setText(passApt.getTitle());
         appointmentDescription.setText(passApt.getDescription());
         appointmentLocation.setText(passApt.getLocation());
-        appointmentType.setText(passApt.getType());
-        contactList.setValue(passedContact.getContactName());
+        assignedAssociate.setValue(User.getUser(passApt.getUserID()).getUserName());
         customerList.setValue(passedCustomer.getName());
-        userIDList.setValue(User.getUser(passApt.getUserID()).getUserName());
+        caseStatusList.setValue(passApt.getType());
         startDate.setValue(passApt.getStartDateTime().toLocalDateTime().toLocalDate());
         startTimeList.setValue(passApt.getStartDateTime().toLocalDateTime().toLocalTime());
         endDate.setValue(passApt.getEndDateTime().toLocalDateTime().toLocalDate());
         endTimeList.setValue(passApt.getEndDateTime().toLocalDateTime().toLocalTime());
+
+        pickedAssignedAssociate = User.getUser(passApt.getUserID());
 
         if (!(startDate.getValue() == null)) {
             endDate.setDisable(false);
@@ -111,6 +107,13 @@ public class AppointmentFormController implements Initializable {
      */
     public void getData(User user) {
         passUser = user;
+    }
+
+    public void getData(Customer passedCustomer, User user) {
+        passUser = user;
+        followUpAPCX = passedCustomer;
+
+        customerList.setValue(followUpAPCX.getName());
     }
 
 
@@ -140,7 +143,7 @@ public class AppointmentFormController implements Initializable {
         selectedEndDate = endDate.getValue();
     }
 
-    User selectedUser;
+    User pickedAssignedAssociate;
 
     /**
      * Gets selected User ID form the userID comboBox
@@ -149,8 +152,8 @@ public class AppointmentFormController implements Initializable {
      *
      * @param actionEvent
      */
-    public void userIDList(ActionEvent actionEvent) {
-        selectedUser = User.getUser(userIDList.getValue());
+    public void assignedAssociate(ActionEvent actionEvent) {
+        pickedAssignedAssociate = User.getUser(assignedAssociate.getValue());
     }
 
 
@@ -204,11 +207,7 @@ public class AppointmentFormController implements Initializable {
             validationAlert.errorMessage("Validation Error", "Location cannot be blank");
             return;
         }
-        if (appointmentType.getText().isEmpty()) {
-            validationAlert.errorMessage("Validation Error", "Type cannot be blank");
-            return;
-        }
-        if (contactList.getValue() == null) {
+        if (assignedAssociate.getValue() == null) {
             validationAlert.errorMessage("Validation Error", "You must select a contact");
             return;
         }
@@ -216,7 +215,7 @@ public class AppointmentFormController implements Initializable {
             validationAlert.errorMessage("Validation Error", "You must select a customer");
             return;
         }
-        if (userIDList.getValue() == null) {
+        if (caseStatusList.getValue() == null) {
             validationAlert.errorMessage("Validation Error", "You must select a user");
             return;
         }
@@ -251,13 +250,11 @@ public class AppointmentFormController implements Initializable {
         }
 
         Customer customer = Customer.getCustomerByName(customerList.getValue());
-        Contact contact = Contact.getContactByName(contactList.getValue());
-        User user = User.getUser(userIDList.getValue());
 
         String title = appointmentTitle.getText();
         String description = appointmentDescription.getText();
         String location = appointmentLocation.getText();
-        String type = appointmentType.getText();
+        String type = caseStatusList.getValue();
         Timestamp startDateTime = Timestamp.valueOf(LocalDateTime.of(startDate.getValue(), startTimeList.getValue()));
         Timestamp endDateTime = Timestamp.valueOf(LocalDateTime.of(endDate.getValue(), endTimeList.getValue()));
 
@@ -272,14 +269,13 @@ public class AppointmentFormController implements Initializable {
         Timestamp lastUpdated = Timestamp.valueOf(LocalDateTime.now());
         String lastUpdatedBy = passUser.getUserName();
         int customerID = customer.getCustomerID();
-        int userID = User.getUser(userIDList.getValue()).getUserID();
-        int contactID = contact.getContactID();
+        int userID = pickedAssignedAssociate.getUserID();
 
 
         if (appointmentFormLabel.getText().equals("Add Appointment")) {
             Appointment appointment = new Appointment(title, description, location,
                     type, startDateTime, endDateTime, createdDate, createdBy,
-                    lastUpdated, lastUpdatedBy, customerID, userID, contactID);
+                    lastUpdated, lastUpdatedBy, customerID, userID);
 
             if (checkAppointmentOverlap(customerID, appointment)) {
                 Appointment.addNewAppointment(appointment);
@@ -294,7 +290,7 @@ public class AppointmentFormController implements Initializable {
 
             Appointment appointment = new Appointment(oldAptID, title, description, location,
                     type, startDateTime, endDateTime, createdDate, createdBy,
-                    lastUpdated, lastUpdatedBy, customerID, userID, contactID);
+                    lastUpdated, lastUpdatedBy, customerID, userID);
 
             if (checkAppointmentOverlap(customerID, appointment)) {
                 Appointment.updateAppointment(appointment);
@@ -359,16 +355,24 @@ public class AppointmentFormController implements Initializable {
         return flag;
     }
 
-        private void initializeContacts () {
-            contactList.setItems(Contact.getAllContactStrings());
+        private void initializeAssociateList() {
+            assignedAssociate.setItems(User.getAllAssociateStrings());
         }
 
         private void initializeCustomers () {
             customerList.setItems(Customer.getAllCustomerStrings());
         }
 
-        private void initializeUsers () {
-            userIDList.setItems(User.getAllUserStrings());
+        private void initializeCaseStatuses () {
+        ObservableList<String> caseStatuses = FXCollections.observableArrayList();
+        caseStatuses.add("Initial Meeting");
+        caseStatuses.add("Discovery");
+        caseStatuses.add("Deposition");
+        caseStatuses.add("Court Date Set");
+        caseStatuses.add("Won");
+        caseStatuses.add("Lost");
+        caseStatuses.add("Appeal");
+            caseStatusList.setItems(caseStatuses);
         }
 
         private void initializeTimeBox () {
@@ -384,9 +388,9 @@ public class AppointmentFormController implements Initializable {
         @Override
         public void initialize (URL url, ResourceBundle resourceBundle){
             initializeTimeBox();
-            initializeUsers();
+            initializeCaseStatuses();
             initializeCustomers();
-            initializeContacts();
+            initializeAssociateList();
         }
 
 

@@ -42,7 +42,7 @@ public class CountryDivision {
     public static void addCustomer(Customer newCX) {
         Timestamp currentTimeStamp = Timestamp.valueOf(LocalDateTime.now());
 
-        CustomerDoeImpl.addCustomer(newCX);;
+        CustomerDoeImpl.addCustomer(newCX);
     }
 
 }

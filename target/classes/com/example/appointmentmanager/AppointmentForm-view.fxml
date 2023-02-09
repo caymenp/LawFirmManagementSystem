@@ -34,8 +34,8 @@
                 <RowConstraints maxHeight="58.0" minHeight="3.0" prefHeight="35.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="62.0" minHeight="1.0" prefHeight="34.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="62.0" minHeight="1.0" prefHeight="36.0" vgrow="SOMETIMES" />
-                  <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="95.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="95.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="101.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="151.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="151.0" minHeight="0.0" prefHeight="13.0" vgrow="SOMETIMES" />
@@ -45,59 +45,53 @@
               </rowConstraints>
                <children>
                   <TextField fx:id="appointmentID" disable="true" editable="false" promptText="Disabled - Auto Gen" GridPane.columnIndex="1" />
-                  <TextField fx:id="appointmentTitle" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="appointmentTitle" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Appointment ID:" wrappingWidth="174.21630859375">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <Text layoutX="10.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="174.21630859375" GridPane.rowIndex="1">
+                  <Text layoutX="10.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="174.21630859375" GridPane.rowIndex="2">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <Text layoutX="10.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assigned Associate:" wrappingWidth="174.21630859375" GridPane.rowIndex="5">
+                  <Text layoutX="10.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Assigned Associate:" wrappingWidth="174.21630859375" GridPane.rowIndex="6">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <Text layoutX="10.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User ID:" wrappingWidth="174.21630859375" GridPane.rowIndex="7">
+                  <Text layoutX="10.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Case Status:" wrappingWidth="174.21630859375" GridPane.rowIndex="7">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <Text layoutX="10.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="174.21630859375" GridPane.rowIndex="2">
+                  <Text layoutX="10.0" layoutY="86.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="174.21630859375" GridPane.rowIndex="3">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="appointmentDescription" layoutX="256.0" layoutY="67.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="appointmentDescription" layoutX="256.0" layoutY="67.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Text layoutX="10.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date/Time" textAlignment="CENTER" wrappingWidth="218.21630859375" GridPane.rowIndex="9">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <Text layoutX="10.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer:" wrappingWidth="174.21630859375" GridPane.rowIndex="6">
+                  <Text layoutX="10.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer:" wrappingWidth="174.21630859375" GridPane.rowIndex="1">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <ComboBox fx:id="contactList" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                  <Text layoutX="10.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location" wrappingWidth="164.21630859375" GridPane.rowIndex="3">
+                  <ComboBox fx:id="assignedAssociate" onAction="#assignedAssociate" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" />
+                  <Text layoutX="10.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Location" wrappingWidth="164.21630859375" GridPane.rowIndex="4">
                      <font>
                         <Font size="19.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="appointmentLocation" layoutX="257.0" layoutY="106.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Text layoutX="10.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" wrappingWidth="164.21630859375" GridPane.rowIndex="4">
-                     <font>
-                        <Font size="19.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="appointmentType" layoutX="257.0" layoutY="120.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="appointmentLocation" layoutX="257.0" layoutY="106.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <DatePicker fx:id="startDate" onAction="#startDate" GridPane.halignment="CENTER" GridPane.rowIndex="10" />
-                  <ComboBox fx:id="customerList" layoutX="297.0" layoutY="190.0" prefHeight="25.0" prefWidth="149.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <ComboBox fx:id="userIDList" layoutX="297.0" layoutY="240.0" onAction="#userIDList" prefHeight="25.0" prefWidth="149.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <ComboBox fx:id="customerList" layoutX="297.0" layoutY="190.0" prefHeight="25.0" prefWidth="149.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="caseStatusList" layoutX="297.0" layoutY="240.0" prefHeight="25.0" prefWidth="149.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                   <Text layoutX="10.0" layoutY="319.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End Date/Time" textAlignment="CENTER" wrappingWidth="242.21630859375" GridPane.columnIndex="1" GridPane.rowIndex="9">
                      <font>
                         <Font size="19.0" />

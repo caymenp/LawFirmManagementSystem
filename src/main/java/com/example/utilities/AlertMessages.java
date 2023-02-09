@@ -55,7 +55,7 @@ public class AlertMessages {
         alert.setContentText(alertDescription);
         alert.showAndWait();
         return alert.getResult().getText();
-    };
+    }
 
     public void informationMessageLang(ResourceBundle rb) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -63,7 +63,7 @@ public class AlertMessages {
         alert.setHeaderText("");
         alert.setContentText(rb.getString("alertInfoDesc"));
         alert.showAndWait();
-    };
+    }
 
     public void informationMessage(String alertTitle, String alertDescription) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -71,5 +71,5 @@ public class AlertMessages {
         alert.setHeaderText("");
         alert.setContentText(alertDescription);
         alert.showAndWait();
-    };
+    }
 }

@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 /** User Class used for creation/updating/deleting User objects from the DB*/
-public class User {
+public class User extends Appointment {
     private int userID;
     private String userName;
     private String password;
@@ -15,6 +15,7 @@ public class User {
     private String createdBy;
     private Timestamp lastUpdate;
     private String lastUpdatedBy;
+    private int userRole;
 
     /**User Constructor.
      * Based on the stored DB values.
@@ -26,7 +27,7 @@ public class User {
      * @param lastUpdate
      * @param lastUpdatedBy
      */
-    public User(int userID, String userName, String password, String createDate, String createdBy, Timestamp lastUpdate, String lastUpdatedBy) {
+    public User(int userID, String userName, String password, String createDate, String createdBy, Timestamp lastUpdate, String lastUpdatedBy, int userRole) {
         this.userID = userID;
         this.userName = userName;
         this.password = password;
@@ -34,6 +35,21 @@ public class User {
         this.createdBy = createdBy;
         this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = lastUpdatedBy;
+        this.userRole = userRole;
+    }
+
+    public User(String userName, String password, String createDate, String createdBy, Timestamp lastUpdate, String lastUpdatedBy, int userRole) {
+        this.userName = userName;
+        this.password = password;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdatedBy = lastUpdatedBy;
+        this.userRole = userRole;
+    }
+
+    public int getUserRole() {
+        return userRole;
     }
 
     public int getUserID() {
@@ -67,6 +83,10 @@ public class User {
     /////Setters
 
 
+    public void setUserRole(int userRole) {
+        this.userRole = userRole;
+    }
+
     public void setUserID(int userID) {
         this.userID = userID;
     }
@@ -95,6 +115,22 @@ public class User {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
+    public static void addUser(User user) {
+        try {
+            UserDoaImpl.addUser(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateUser(User user) {
+        try {
+            UserDoaImpl.updateUser(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /** Verify User Login.
      * Method used to verify the user credientials upon login with the saved valued from the DB
      * @param userName - username typed into the login form
@@ -114,25 +150,31 @@ public class User {
         return null;
     }
 
-    /**LAMBDA - Gets an Observable List of Usersnames as Strings.
-     * Gets all the users from the DB. The lambda expression is then performed within the forEach method of this list,
-     * to get the username from each user object within the list and add that string to the allUserStrings list.
-     * @return ObservableList of Strings to display customer names.
+    /**
+     * Get All User Objects
      */
-    public static ObservableList<String> getAllUserStrings() {
-        ObservableList<User> allUsers = FXCollections.observableArrayList();
-        ObservableList<String> allUserStrings = FXCollections.observableArrayList();
-
+    public static ObservableList<User> getAllUsers() {
         try {
-            allUsers.addAll(UserDoaImpl.getAllUsers());
-            /**
-             * LAMBDA - Adds Usernames to list in String form to display on the GUI.
-             */
-            allUsers.forEach((u) -> {allUserStrings.add(u.getUserName());});
+            return UserDoaImpl.getAllUsers();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return allUserStrings;
+    }
+
+    /**
+     * Returns all Associate Usernames based off of role assigned.
+     * @return
+     */
+    public static ObservableList<String> getAllAssociateStrings() {
+        ObservableList<String> allAssociateUserNames = FXCollections.observableArrayList();
+        try {
+            for (User user : UserDoaImpl.getAssociates()) {
+                allAssociateUserNames.add(user.getUserName());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return allAssociateUserNames;
     }
 
     /** Gets User based on username String.

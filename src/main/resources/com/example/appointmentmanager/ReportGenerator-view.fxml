@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controller.ReportGeneratorController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label alignment="CENTER" layoutX="22.0" layoutY="46.0" prefHeight="29.0" prefWidth="256.0" text="Report Generator" textAlignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="69.0" prefHeight="29.0" prefWidth="272.0" text="Associate Activity" textAlignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="closeBTN" layoutX="243.0" layoutY="268.0" mnemonicParsing="false" onAction="#closeBTN" text="Close" />
+            <ComboBox fx:id="associateList" layoutX="75.0" layoutY="133.0" onAction="#associateList" prefWidth="150.0" promptText="Select Associate" />
+            <Button fx:id="generateReport" layoutX="95.0" layoutY="193.0" mnemonicParsing="false" onAction="#generateReport" style="-fx-background-color: #ADD8E6; -fx-border-color: black;" text="Generate Report" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
