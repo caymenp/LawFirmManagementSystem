@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 /** User Class used for creation/updating/deleting User objects from the DB*/
-public class User extends Appointment {
+public class User {
     private int userID;
     private String userName;
     private String password;

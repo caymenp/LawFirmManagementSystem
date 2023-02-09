@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.Month;
 
 /** Appointemnt Class used for creation/updating/deleting Appointment objects from the DB*/
-public class Appointment extends Customer {
+public class Appointment {
 
     private int appointmentID;
     private String title;
