@@ -1,4 +1,4 @@
-module com.example.appointmentmanager {
+module com.example.managementsystem {
     requires javafx.controls;
     requires javafx.fxml;
     requires mysql.connector.j;

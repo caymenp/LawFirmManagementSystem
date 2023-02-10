@@ -1,7 +1,6 @@
 package com.example.model;
 
 import com.example.DAO.JDBC;
-import com.example.utilities.UserUtilities;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,9 +16,6 @@ import java.util.ResourceBundle;
  * Main Login Model.
  */
 public class MainLogin extends Application {
-    static UserUtilities userInfo = new UserUtilities();
-
-    public static String mainLabel;
 
     /** Start Method
      * Gets the resource bundle to apply to the program at laod.
