@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact name="ManagementSystem:jar2">
+    <output-path>$PROJECT_DIR$/../ManagementApplication</output-path>
+    <root id="root">
+      <element id="archive" name="ManagementSystem.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/../ManagementApplication/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="ManagementSystem" />
+      </element>
+      <element id="library" level="project" name="Maven: com.mysql:mysql-connector-j:8.0.32" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-graphics:mac-aarch64:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:mac-aarch64:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-base:mac-aarch64:17.0.2" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-fxml:17.0.2" />
+      <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:3.21.9" />
+      <element id="library" level="project" name="Maven: org.openjfx:javafx-controls:mac-aarch64:17.0.2" />
+    </root>
+  </artifact>
+</component>
