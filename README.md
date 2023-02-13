@@ -50,27 +50,27 @@ Application Login Details
 
 
 ## Screenshots
-**MySQL Database Design**
-![App Screenshot](media/DatabaseDesign.png)
+**MySQL Database Design** <br>
+![App Screenshot](media/DatabaseDesign.png)<br>
 
-**Login Screen**
-![App Screenshot](media/MainLoginScreen.png)
+**Login Screen**<br>
+![App Screenshot](media/MainLoginScreen.png)<br>
 
-**Appointment Reminder Upon Login**
-![App Screenshot](media/AppointmentReminder.png)
+**Appointment Reminder Upon Login**<br>
+![App Screenshot](media/AppointmentReminder.png)<br>
 
-**Main Application Screen** (Showing Scheduled Appointments)
-![App Screenshot](media/MainApplicationPage.png)
+**Main Application Screen** (Showing Scheduled Appointments)<br>
+![App Screenshot](media/MainApplicationPage.png)<br>
 
-**Main Application Screen** (Showing Client Records)
-![App Screenshot](media/ClientDashboard.png)
+**Main Application Screen** (Showing Client Records)<br>
+![App Screenshot](media/ClientDashboard.png)<br>
 
-**CRUD Form Example**
-![App Screenshot](media/ModifyAppointment.png)
+**CRUD Form Example**<br>
+![App Screenshot](media/ModifyAppointment.png)<br>
 
-**User Management Dashboard** (User permissions 2 or 3 only)
-![App Screenshot](media/UserManagement.png)
+**User Management Dashboard** (User permissions 2 or 3 only)<br>
+![App Screenshot](media/UserManagement.png)<br>
 
-**Client Meeting Dashboard** (Only accessible to assigned associate for client security)
-![App Screenshot](media/ClientMeeting.png)
+**Client Meeting Dashboard** (Only accessible to assigned associate for client security)<br>
+![App Screenshot](media/ClientMeeting.png)<br>
 
